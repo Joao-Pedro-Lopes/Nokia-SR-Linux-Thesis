@@ -1,0 +1,102 @@
+{
+    "interface": [
+        {
+            "name": "ethernet-1/1",
+            "description": "ethernet-1/1 interface on spine1 node",
+            "admin-state": "enable",
+            "subinterface": [
+                {
+                    "index": 0,
+                    "admin-state": "enable",
+                    "ipv4": {
+                        "address": [
+                            {
+                                "ip-prefix": "192.168.11.2/30"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ethernet-1/2",
+            "description": "ethernet-1/2 interface on spine1 node",
+            "admin-state": "enable",
+            "subinterface": [
+                {
+                    "index": 0,
+                    "admin-state": "enable",
+                    "ipv4": {
+                        "address": [
+                            {
+                                "ip-prefix": "192.168.12.2/30"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "system0",
+            "description": "system0 interface on spine1 node",
+            "admin-state": "enable",
+            "subinterface": [
+                {
+                    "index": 0,
+                    "admin-state": "enable",
+                    "ipv4": {
+                        "address": [
+                            {
+                                "ip-prefix": "10.0.1.1/32"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "network-instance": [
+        {
+            "name": "default",
+            "interface": [
+                {
+                    "name": "ethernet-1/1.0"
+                },
+                {
+                    "name": "ethernet-1/2.0"
+                },
+                {
+                    "name": "system0.0"
+                }
+            ],
+            "protocols": {
+                "bgp": {
+                    "autonomous-system": 201,
+                    "router-id": "10.0.1.1",
+                    "group": [
+                        {
+                            "group-name": "eBGP-underlay",
+                            "export-policy": "all",
+                            "import-policy": "all",
+                            "ipv4-unicast": {
+                                "admin-state": "enable"
+                            }
+                        }
+                    ],
+                    "neighbor": [
+                        {
+                            "peer-address": "192.168.11.1",
+                            "peer-as": 101,
+                            "peer-group": "eBGP-underlay"
+                        },
+                        {
+                            "peer-address": "192.168.12.1",
+                            "peer-as": 102,
+                            "peer-group": "eBGP-underlay"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

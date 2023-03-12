@@ -1,0 +1,67 @@
+name: evpn01
+
+topology:
+  kinds:
+    srl:
+      image: ghcr.io/nokia/srlinux:22.11.1
+    linux:
+      image: ghcr.io/hellt/network-multitool
+
+  nodes:
+    leaf1:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          interface: ethernet-1/49, system0
+          network-instance: default, default
+          subinterface: 0, 0
+          ipv4-address: 192.168.11.1/30, 10.0.0.1/32
+          as: 101
+          bgp_underlay: true
+          peer-as: 201
+          export-policy: all
+          import-policy: all
+          neighbor: 192.168.11.2
+    leaf2:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          interface: ethernet-1/49, system0
+          network-instance: default, ip-vrf
+          subinterface: 0, 0
+          ipv4-address: 192.168.12.1/30, 10.0.0.2/32
+          as: 102
+          bgp_underlay: true
+          peer-as: 201
+          export-policy: all
+          import-policy: all
+          neighbor: 192.168.12.2
+    spine1:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          interface: ethernet-1/1, ethernet-1/2, system0
+          network-instance: default, default, default
+          subinterface: 0, 0, 0
+          ipv4-address: 192.168.11.2/30, 192.168.12.2/30, 10.0.1.1/32
+          as: 201
+          bgp_underlay: true
+          peer-as: 101, 102
+          export-policy: all
+          import-policy: all
+          neighbor: 192.168.11.1, 192.168.12.1
+    srv1:
+      kind: linux
+    srv2:
+      kind: linux
+
+  links:
+    # inter-switch links
+    - endpoints: ["leaf1:e1-49", "spine1:e1-1"]
+    - endpoints: ["leaf2:e1-49", "spine1:e1-2"]
+    # server links
+    - endpoints: ["srv1:eth1", "leaf1:e1-1"]
+    - endpoints: ["srv2:eth1", "leaf2:e1-1"]
