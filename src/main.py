@@ -33,6 +33,15 @@ for node_name, node_data in vars_section.items():
 
             ibgp_generator(interface_configs, node_name, node_data)
 
+        if 'routing-policy' in node_data['config']['vars']:
+            interface_configs[node_name]['routing-policy'] = {
+                'policy': [
+                    {
+                        'name': node_data['config']['vars']['routing-policy']
+                    }
+                ]
+            }
+
 # Loop through the interface configurations for each node and write them to separate files
 for node_name, node_interfaces in interface_configs.items():
     output = json.dumps(node_interfaces, indent=4)
@@ -42,4 +51,4 @@ for node_name, node_interfaces in interface_configs.items():
         print(f'Wrote interface configuration for {node_name} to {filename}')
 
 
-#TODO: MISSING ROUTING POLICY AND iBGP
+#TODO: MISSING ROUTING POLICY AND iBGP with route reflector

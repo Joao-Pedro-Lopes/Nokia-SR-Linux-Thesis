@@ -21,7 +21,7 @@ def bgp_generator(interface_configs, node_name, node_data):
     peer_as = node_data['config']['vars']['bgp-peer-as']
     peer_autonomous_systems = []
     if isinstance(peer_as, int):
-        bgp_underlay_template['group'][0]['bgp-peer-as'] = peer_as
+        bgp_underlay_template['group'][0]['peer-as'] = peer_as
     elif isinstance(peer_as, str):
         peer_autonomous_systems = [peer_as.strip() for peer_as in peer_as.split(',')]
 
