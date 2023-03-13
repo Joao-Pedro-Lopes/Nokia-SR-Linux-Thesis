@@ -46,7 +46,7 @@ for node_name, node_data in vars_section.items():
 for node_name, node_interfaces in interface_configs.items():
     output = json.dumps(node_interfaces, indent=4)
     filename = f'{node_name}_config.json'
-    with open(f'../output/{filename}', 'w') as f:
+    with open(f'output/{filename}', 'w') as f: # --> change done on test environment
         f.write(output)
         print(f'Wrote interface configuration for {node_name} to {filename}')
 

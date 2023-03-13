@@ -98,5 +98,12 @@
                 }
             }
         }
-    ]
+    ],
+    "routing-policy": {
+        "policy": [
+            {
+                "name": "all"
+            }
+        ]
+    }
 }

@@ -60,7 +60,7 @@
                             "ipv4-unicast": {
                                 "admin-state": "enable"
                             },
-                            "bgp-peer-as": 201
+                            "peer-as": 201
                         },
                         {
                             "group-name": "iBGP-overlay",
@@ -100,5 +100,12 @@
                 }
             }
         }
-    ]
+    ],
+    "routing-policy": {
+        "policy": [
+            {
+                "name": "all"
+            }
+        ]
+    }
 }
