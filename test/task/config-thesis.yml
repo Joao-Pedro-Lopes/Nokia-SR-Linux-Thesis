@@ -3,11 +3,9 @@
   connection: local
   gather_facts: no
   tasks:
-    #it works, already tested
     - name: Create configuration files
       ansible.builtin.command: |
-        python3 main.py ../l2_evpn/topology_template_v3.yml 
-
+        python3 src/main.py ../topology_template_v5.yml
     - name: Leaf1 configuration task
       ansible.builtin.uri:
         url: http://{{inventory_hostname}}/jsonrpc
@@ -22,7 +20,7 @@
             commands:
               - action: update
                 path: /
-                value: "{{lookup('ansible.builtin.template', '{{playbook_dir}}/leaf1_config.json.j2') }}"
+                value: "{{lookup('ansible.builtin.template', '{{playbook_dir}}/output/leaf1_config.json') }}"
         body_format: json
       register: set_result
 

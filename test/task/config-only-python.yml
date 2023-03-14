@@ -1,0 +1,8 @@
+- name: Configuration
+  hosts: all
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Create configuration files
+      ansible.builtin.command: |
+        python3 src/main.py ../topology_template_v4.yml

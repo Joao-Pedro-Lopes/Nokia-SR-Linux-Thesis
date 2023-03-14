@@ -1,0 +1,57 @@
+- name: Configuration
+  hosts: all
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Create configuration files
+      ansible.builtin.command: |
+        python3 src/main.py ../topology_template_v5.yml
+    - name: Leaf1 configuration task
+      ansible.builtin.uri:
+        url: http://{{inventory_hostname}}/jsonrpc
+        url_username: admin
+        url_password: admin
+        method: POST
+        body:
+          jsonrpc: "2.0"
+          id: 1
+          method: set
+          params:
+            commands:
+              - action: update
+                path: /
+                value: "{{lookup('ansible.builtin.template', '{{playbook_dir/output}}/leaf1_config.json') }}"
+        body_format: json
+      register: set_result
+
+    - name: Stop if request contains error
+      ansible.builtin.fail:
+        msg: "Error: {{set_result.json.error.message}}"
+      when: set_result.json.error is defined
+
+    - name: Verify configuration set
+      ansible.builtin.uri:
+        url: http://{{inventory_hostname}}/jsonrpc
+        url_username: admin
+        url_password: NokiaSrl1!
+        method: POST
+        body:
+          jsonrpc: "2.0"
+          id: 2
+          method: get
+          params:
+            datastore: state
+            commands:
+              - path: /interface[name=system0]/description
+              - path: /system/information
+              - path: /interface[name=ethernet-1/49]/description
+              - path: /interface[name=lo0]/description
+        body_format: json
+      register: get_result
+
+    - ansible.builtin.debug:
+        msg:
+          - "success"
+
+    # - ansible.builtin.debug:
+    #     msg: "{{get_result.json.result[2].}}"

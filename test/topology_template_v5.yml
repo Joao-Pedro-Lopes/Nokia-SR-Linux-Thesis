@@ -1,0 +1,104 @@
+name: test
+
+topology:
+  kinds:
+    srl:
+      image: ghcr.io/nokia/srlinux:22.11.1
+    linux:
+      image: ghcr.io/hellt/network-multitool
+  #ethernet
+  #system
+  #p2p
+  #as
+  nodes:
+    leaf1:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          interface: ethernet-1/49, system0
+          network-instance: default
+          subinterface: 0, 0
+          ipv4-address: 192.168.11.1/30, 10.0.0.1/32
+          as: 101
+          routing-policy: all
+          routing-policy-action: accept
+          bgp-underlay: true
+          bgp-group: eBGP-underlay
+          bgp-router-id: 10.0.0.1
+          bgp-peer-as: 201
+          bgp-peer-group: eBGP-underlay
+          bgp-export-policy: all
+          bgp-import-policy: all
+          bgp-neighbor: 192.168.11.2
+          ibgp-overlay: true
+          ibgp-group: iBGP-overlay
+          ibgp-peer-as: 100
+          ibgp-peer-group: iBGP-overlay
+          ibgp-export-policy: all
+          ibgp-import-policy: all
+          ibgp-neighbor: 10.0.0.2
+          ibgp-local-address: 10.0.0.1
+          ibgp-minimum-advertisement-interval: 1
+    leaf2:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          interface: ethernet-1/49, system0
+          network-instance: default
+          subinterface: 0, 0
+          ipv4-address: 192.168.12.1/30, 10.0.0.2/32
+          as: 102
+          routing-policy: all
+          routing-policy-action: accept
+          bgp-underlay: true
+          bgp-group: eBGP-underlay
+          bgp-router-id: 10.0.0.2
+          bgp-peer-as: 201
+          bgp-peer-group: eBGP-underlay
+          bgp-export-policy: all
+          bgp-import-policy: all
+          bgp-neighbor: 192.168.12.2
+          ibgp-overlay: true
+          ibgp-group: iBGP-overlay
+          ibgp-peer-as: 100
+          ibgp-peer-group: iBGP-overlay
+          ibgp-export-policy: all
+          ibgp-import-policy: all
+          ibgp-neighbor: 10.0.0.1
+          ibgp-local-address: 10.0.0.2
+          ibgp-minimum-advertisement-interval: 1
+    spine1:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          interface: ethernet-1/1, ethernet-1/2, system0
+          network-instance: default
+          subinterface: 0, 0, 0
+          ipv4-address: 192.168.11.2/30, 192.168.12.2/30, 10.0.1.1/32
+          as: 201
+          routing-policy: all
+          routing-policy-action: accept
+          bgp-underlay: true
+          bgp-group: eBGP-underlay
+          bgp-router-id: 10.0.1.1
+          bgp-peer-as: 101, 102
+          bgp-peer-group: eBGP-underlay, eBGP-underlay
+          bgp-export-policy: all
+          bgp-import-policy: all
+          bgp-neighbor: 192.168.11.1, 192.168.12.1
+          #ibgp-overlay: false
+    srv1:
+      kind: linux
+    srv2:
+      kind: linux
+
+  links:
+    # inter-switch links
+    - endpoints: ["leaf1:e1-49", "spine1:e1-1"]
+    - endpoints: ["leaf2:e1-49", "spine1:e1-2"]
+    # server links
+    - endpoints: ["srv1:eth1", "leaf1:e1-1"]
+    - endpoints: ["srv2:eth1", "leaf2:e1-1"]

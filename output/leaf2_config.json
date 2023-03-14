@@ -104,7 +104,10 @@
     "routing-policy": {
         "policy": [
             {
-                "name": "all"
+                "name": "all",
+                "default-action": {
+                    "accept": {}
+                }
             }
         ]
     }

@@ -2,7 +2,7 @@
     "interface": [
         {
             "name": "ethernet-1/49",
-            "description": "ethernet-1/49 interface on leaf1 node",
+            "description": "ethernet-1/49 interface on leaf2 node",
             "admin-state": "enable",
             "subinterface": [
                 {
@@ -11,7 +11,7 @@
                     "ipv4": {
                         "address": [
                             {
-                                "ip-prefix": "192.168.11.1/30"
+                                "ip-prefix": "192.168.12.1/30"
                             }
                         ]
                     }
@@ -20,7 +20,7 @@
         },
         {
             "name": "system0",
-            "description": "system0 interface on leaf1 node",
+            "description": "system0 interface on leaf2 node",
             "admin-state": "enable",
             "subinterface": [
                 {
@@ -29,7 +29,7 @@
                     "ipv4": {
                         "address": [
                             {
-                                "ip-prefix": "10.0.0.1/32"
+                                "ip-prefix": "10.0.0.2/32"
                             }
                         ]
                     }
@@ -50,8 +50,8 @@
             ],
             "protocols": {
                 "bgp": {
-                    "autonomous-system": 101,
-                    "router-id": "10.0.0.1",
+                    "autonomous-system": 102,
+                    "router-id": "10.0.0.2",
                     "group": [
                         {
                             "group-name": "eBGP-underlay",
@@ -85,15 +85,15 @@
                     ],
                     "neighbor": [
                         {
-                            "peer-address": "192.168.11.2",
+                            "peer-address": "192.168.12.2",
                             "peer-group": "eBGP-underlay"
                         },
                         {
-                            "peer-address": "10.0.0.2",
+                            "peer-address": "10.0.0.1",
                             "admin-state": "enable",
                             "peer-group": "iBGP-overlay",
                             "transport": {
-                                "local-address": "10.0.0.1"
+                                "local-address": "10.0.0.2"
                             }
                         }
                     ]
@@ -106,7 +106,7 @@
             {
                 "name": "all",
                 "default-action": {
-                    "accept": {}
+                    "policy-result": "accept"
                 }
             }
         ]
