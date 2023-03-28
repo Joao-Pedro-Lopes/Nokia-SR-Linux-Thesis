@@ -10,7 +10,7 @@ def interface_generator(interface_configs, node_name, node_data):
     network_instance_template = {
         'name': node_data['config']['vars']['network-instance'],
         'interface': [],
-        'protocols': {}
+        #'protocols': {}
     }
     
     # Loop through the interface names, subinterface indices, and IPv4 addresses, and fill in the templates

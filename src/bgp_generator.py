@@ -1,4 +1,13 @@
-def bgp_generator(interface_configs, node_name, node_data):
+def bgp_generator(interface_configs, node_name, node_data, individual):
+    config = {}
+    if (individual):
+        config[node_name] = {}
+        config[node_name]['network-instance'] = []
+        config[node_name]['network-instance'].append({})
+    else:
+        config[node_name] = interface_configs[node_name]
+
+
     peer_groups = [peer_g.strip() for peer_g in node_data['config']['vars']['bgp-peer-group'].split(',')]
     neighbors = [n.strip() for n in node_data['config']['vars']['bgp-neighbor'].split(',')]
 
@@ -25,7 +34,9 @@ def bgp_generator(interface_configs, node_name, node_data):
     elif isinstance(peer_as, str):
         peer_autonomous_systems = [peer_as.strip() for peer_as in peer_as.split(',')]
 
-    interface_configs[node_name]['network-instance'][0]['protocols']['bgp'] = bgp_underlay_template
+    config[node_name]['network-instance'][0]['protocols'] = {}
+    config[node_name]['network-instance'][0]['protocols']['bgp'] = bgp_underlay_template
+
 
     if peer_autonomous_systems != []:
         for i, (peer_autonomous_system, peer_group, neighbor) in enumerate(zip(peer_autonomous_systems, peer_groups, neighbors)):
@@ -35,7 +46,7 @@ def bgp_generator(interface_configs, node_name, node_data):
                 'peer-group': peer_group
             }
 
-            interface_configs[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(bgp_neighbor_template)
+            config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(bgp_neighbor_template)
     else:
         for i, (peer_group, neighbor) in enumerate(zip(peer_groups, neighbors)):
             bgp_neighbor_template = {
@@ -43,6 +54,6 @@ def bgp_generator(interface_configs, node_name, node_data):
                 'peer-group': peer_group
             }
 
-            interface_configs[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(bgp_neighbor_template)
+            config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(bgp_neighbor_template)
     
-    return interface_configs
+    return config
