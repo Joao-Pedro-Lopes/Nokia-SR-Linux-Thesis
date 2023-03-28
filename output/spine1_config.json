@@ -104,7 +104,7 @@
             {
                 "name": "all",
                 "default-action": {
-                    "accept": {}
+                    "policy-result": "accept"
                 }
             }
         ]

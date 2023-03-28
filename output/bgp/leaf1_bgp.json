@@ -1,0 +1,29 @@
+{
+    "network-instance": [
+        {
+            "protocols": {
+                "bgp": {
+                    "autonomous-system": 101,
+                    "router-id": "10.0.0.1",
+                    "group": [
+                        {
+                            "group-name": "eBGP-underlay",
+                            "export-policy": "all",
+                            "import-policy": "all",
+                            "ipv4-unicast": {
+                                "admin-state": "enable"
+                            },
+                            "peer-as": 201
+                        }
+                    ],
+                    "neighbor": [
+                        {
+                            "peer-address": "192.168.11.2",
+                            "peer-group": "eBGP-underlay"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

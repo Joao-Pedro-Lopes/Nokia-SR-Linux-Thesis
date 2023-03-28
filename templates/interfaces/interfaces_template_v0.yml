@@ -1,0 +1,7 @@
+leaf1:
+  config:
+    vars:
+      interface: ethernet-1/49, system0
+      network-instance: default
+      subinterface: 0, 0
+      ipv4-address: 192.168.11.1/30, 10.0.0.1/32

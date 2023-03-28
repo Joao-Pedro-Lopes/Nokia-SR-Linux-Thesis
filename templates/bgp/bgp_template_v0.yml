@@ -1,0 +1,11 @@
+leaf1:
+  config:
+    vars:
+      as: 101
+      bgp-group: eBGP-underlay
+      bgp-router-id: 10.0.0.1
+      bgp-peer-as: 201
+      bgp-peer-group: eBGP-underlay
+      bgp-export-policy: all
+      bgp-import-policy: all
+      bgp-neighbor: 192.168.11.2
