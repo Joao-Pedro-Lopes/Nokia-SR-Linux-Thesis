@@ -27,7 +27,7 @@ for node_name, node_data in vars_section.items():
 
         if 'bgp-underlay' in node_data['config']['vars'] and node_data['config']['vars']['bgp-underlay']:
 
-            bgp_generator(interface_configs, node_name, node_data)
+            bgp_generator(interface_configs, node_name, node_data, individual=False)
         
         if 'ibgp-overlay' in node_data['config']['vars'] and node_data['config']['vars']['ibgp-overlay']:
 
@@ -49,9 +49,9 @@ for node_name, node_data in vars_section.items():
 for node_name, node_interfaces in interface_configs.items():
     output = json.dumps(node_interfaces, indent=4)
     filename = f'{node_name}_config.json'
-    with open(f'output/{filename}', 'w') as f: # --> change to output/{filename} done on test environment
+    with open(f'../output/{filename}', 'w') as f: # --> change to output/{filename} done on test environment
         f.write(output)
-        print(f'Wrote interface configuration for {node_name} to {filename}')
+        print(f'Wrote complete configuration for {node_name} to {filename}')
 
 
-#TODO: FIX ROUTING POLICY AND MISSING iBGP with route reflector
+#TODO: FIX MISSING iBGP with route reflector
