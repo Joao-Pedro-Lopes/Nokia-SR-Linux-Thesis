@@ -21,7 +21,11 @@ def ibgp_generator(interface_configs, node_name, node_data):
         ],
         'timers': {
             'minimum-advertisement-interval': node_data['config']['vars']['ibgp-minimum-advertisement-interval']
-        }
+        },
+        #'route-reflector': {
+        #    'client': True,
+        #    'cluster-id': '0.0.0.1'
+        #}
     }
 
     peer_as = node_data['config']['vars']['ibgp-peer-as']
