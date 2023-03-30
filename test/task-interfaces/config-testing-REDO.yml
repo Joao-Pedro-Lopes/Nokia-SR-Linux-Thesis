@@ -5,8 +5,8 @@
   tasks:
     - name: Create configuration files
       ansible.builtin.command: |
-        python3 src/main.py ../topology_template_v5.yml
-    - name: Elements configuration task
+        python3 src/interfaces_main.py ../interfaces_template_v0.yml
+    - name: Leaf 1 interfaces configuration task
       ansible.builtin.uri:
         url: http://{{inventory_hostname}}/jsonrpc
         url_username: admin
@@ -20,7 +20,7 @@
             commands:
               - action: update
                 path: /
-                value: "{{lookup('ansible.builtin.template', '{{playbook_dir}}/output/{{name}}_config.json') }}"
+                value: "{{lookup('ansible.builtin.template', '{{playbook_dir}}/output/interfaces/{{name}}_interfaces.json') }}"
         body_format: json
       register: set_result
 
@@ -45,7 +45,6 @@
               - path: /interface[name=system0]/description
               - path: /system/information
               - path: /interface[name=ethernet-1/49]/description
-              - path: /interface[name=lo0]/description
         body_format: json
       register: get_result
 

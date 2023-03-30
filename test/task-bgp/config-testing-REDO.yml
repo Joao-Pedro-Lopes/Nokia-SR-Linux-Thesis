@@ -5,7 +5,7 @@
   tasks:
     - name: Create configuration files
       ansible.builtin.command: |
-        python3 src/main.py ../topology_template_v5.yml
+        python3 src/bgp_main.py ../bgp_template_v0.yml
     - name: Elements configuration task
       ansible.builtin.uri:
         url: http://{{inventory_hostname}}/jsonrpc
@@ -20,7 +20,7 @@
             commands:
               - action: update
                 path: /
-                value: "{{lookup('ansible.builtin.template', '{{playbook_dir}}/output/{{name}}_config.json') }}"
+                value: "{{lookup('ansible.builtin.template', '{{playbook_dir}}/output/bgp/{{name}}_bgp.json') }}"
         body_format: json
       register: set_result
 

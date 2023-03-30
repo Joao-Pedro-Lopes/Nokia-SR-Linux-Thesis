@@ -1,0 +1,53 @@
+{
+    "interface": [
+        {
+            "name": "ethernet-1/49",
+            "description": "ethernet-1/49 interface on leaf1 node",
+            "admin-state": "enable",
+            "subinterface": [
+                {
+                    "index": 0,
+                    "admin-state": "enable",
+                    "ipv4": {
+                        "address": [
+                            {
+                                "ip-prefix": "192.168.11.1/30"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "system0",
+            "description": "system0 interface on leaf1 node",
+            "admin-state": "enable",
+            "subinterface": [
+                {
+                    "index": 0,
+                    "admin-state": "enable",
+                    "ipv4": {
+                        "address": [
+                            {
+                                "ip-prefix": "10.0.0.1/32"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "network-instance": [
+        {
+            "name": "default",
+            "interface": [
+                {
+                    "name": "ethernet-1/49.0"
+                },
+                {
+                    "name": "system0.0"
+                }
+            ]
+        }
+    ]
+}
