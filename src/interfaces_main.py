@@ -3,8 +3,6 @@ import yaml
 import sys
 
 from interface_generator import interface_generator
-from bgp_generator import bgp_generator
-from ibgp_generator import ibgp_generator
 
 filename = sys.argv[-1]
 
