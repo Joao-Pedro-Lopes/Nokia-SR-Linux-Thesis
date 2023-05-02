@@ -33,17 +33,17 @@ for node_name, node_data in vars_section.items():
 
             ibgp_generator(interface_configs, node_name, node_data)
 
-        if 'routing-policy' in node_data['config']['vars']:
-            interface_configs[node_name]['routing-policy'] = {
-                'policy': [
-                    {
-                        'name': node_data['config']['vars']['routing-policy'],
-                        'default-action': {
-                            'policy-result': node_data['config']['vars']['routing-policy-action']
-                        }
+        #if 'routing-policy' in node_data['config']['vars']:
+        interface_configs[node_name]['routing-policy'] = {
+            'policy': [
+                {
+                    'name':'all', #node_data['config']['vars']['routing-policy']
+                    'default-action': {
+                        'policy-result': 'accept' #node_data['config']['vars']['routing-policy-action']
                     }
-                ]
-            }
+                }
+            ]
+        }
 
 # Loop through the interface configurations for each node and write them to separate files
 for node_name, node_interfaces in interface_configs.items():
