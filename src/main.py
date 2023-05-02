@@ -5,6 +5,7 @@ import sys
 from interface_generator import interface_generator
 from bgp_generator import bgp_generator
 from ibgp_generator import ibgp_generator
+from routing_policy import routing_policy
 
 filename = sys.argv[-1]
 
@@ -34,16 +35,7 @@ for node_name, node_data in vars_section.items():
             ibgp_generator(interface_configs, node_name, node_data)
 
         #if 'routing-policy' in node_data['config']['vars']:
-        interface_configs[node_name]['routing-policy'] = {
-            'policy': [
-                {
-                    'name':'all', #node_data['config']['vars']['routing-policy']
-                    'default-action': {
-                        'policy-result': 'accept' #node_data['config']['vars']['routing-policy-action']
-                    }
-                }
-            ]
-        }
+        interface_configs[node_name]['routing-policy'] = routing_policy()
 
 # Loop through the interface configurations for each node and write them to separate files
 for node_name, node_interfaces in interface_configs.items():
