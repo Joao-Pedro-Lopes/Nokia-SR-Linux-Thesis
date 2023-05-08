@@ -1,0 +1,10 @@
+leaf1:
+  config:
+    vars:
+      #as: 101 ??? is it necessary?
+      ibgp-cluster-id: 0.0.0.1
+      ibgp-group: iBGP-overlay
+      ibgp-peer-as: 100
+      ibgp-peer-group: iBGP-overlay
+      ibgp-neighbor: 10.0.0.1
+      ibgp-local-address: 10.0.0.2

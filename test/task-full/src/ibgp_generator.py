@@ -5,8 +5,8 @@ def ibgp_generator(interface_configs, node_name, node_data):
 
     ibgp_group_template = {
         'group-name': node_data['config']['vars']['ibgp-group'],
-        'export-policy': node_data['config']['vars']['ibgp-export-policy'],
-        'import-policy': node_data['config']['vars']['ibgp-import-policy'],
+        'export-policy': 'all', #node_data['config']['vars']['ibgp-export-policy']
+        'import-policy': 'all', #node_data['config']['vars']['ibgp-import-policy']
         'peer-as': node_data['config']['vars']['ibgp-peer-as'],
         'ipv4-unicast': {
             "admin-state": 'disable'
@@ -19,10 +19,19 @@ def ibgp_generator(interface_configs, node_name, node_data):
                 "as-number": ''
             }
         ],
-        'timers': {
-            'minimum-advertisement-interval': node_data['config']['vars']['ibgp-minimum-advertisement-interval']
-        }
+        #'timers': {
+            #'minimum-advertisement-interval': node_data['config']['vars']['ibgp-minimum-advertisement-interval']
+        #},
+        #'route-reflector': {
+        #    'client': True,
+        #    'cluster-id': '0.0.0.1'
+        #}
     }
+
+    if ('ibgp-route-reflector' in node_data['config']['vars'] and node_data['config']['vars']['ibgp-route-reflector']):
+        ibgp_group_template['route-reflector'] = {}
+        ibgp_group_template['route-reflector']['client'] = True
+        ibgp_group_template['route-reflector']['cluster-id'] = node_data['config']['vars']['ibgp-cluster-id']
 
     peer_as = node_data['config']['vars']['ibgp-peer-as']
     peer_autonomous_systems = []

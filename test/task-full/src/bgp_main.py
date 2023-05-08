@@ -3,6 +3,7 @@ import yaml
 import sys
 
 from bgp_generator import bgp_generator
+from routing_policy import routing_policy
 
 filename = sys.argv[-1]
 
@@ -19,6 +20,8 @@ for node_name, node_data in data.items():
         print(f'Node: {node_name}')
 
         interface_configs = bgp_generator(interface_configs, node_name, node_data, individual=True) 
+    
+        interface_configs[node_name]['routing-policy'] = routing_policy()
 
 
 # Loop through the interface configurations for each node and write them to separate files

@@ -17,8 +17,8 @@ def bgp_generator(interface_configs, node_name, node_data, individual):
         'group': [
             {
                 'group-name': node_data['config']['vars']['bgp-group'],
-                'export-policy': node_data['config']['vars']['bgp-export-policy'],
-                'import-policy': node_data['config']['vars']['bgp-import-policy'],
+                'export-policy': 'all', #node_data['config']['vars']['bgp-export-policy']
+                'import-policy': 'all', #node_data['config']['vars']['bgp-import-policy']
                 'ipv4-unicast': {
                     'admin-state': 'enable'
                 },
