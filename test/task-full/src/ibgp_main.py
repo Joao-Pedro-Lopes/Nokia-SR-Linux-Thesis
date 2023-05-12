@@ -19,7 +19,7 @@ for node_name, node_data in data.items():
     if (node_name.startswith('leaf') or node_name.startswith('spine')):
         print(f'Node: {node_name}')
 
-        interface_configs = ibgp_generator(interface_configs, node_name, node_data, individual=True) 
+        interface_configs = ibgp_generator(interface_configs, node_name, node_data, individual=True)
     
         interface_configs[node_name]['routing-policy'] = routing_policy()
 

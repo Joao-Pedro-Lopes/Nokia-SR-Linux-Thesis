@@ -32,7 +32,7 @@ for node_name, node_data in vars_section.items():
         
         if 'ibgp-overlay' in node_data['config']['vars'] and node_data['config']['vars']['ibgp-overlay']:
 
-            ibgp_generator(interface_configs, node_name, node_data)
+            ibgp_generator(interface_configs, node_name, node_data, individual=False)
 
         #if 'routing-policy' in node_data['config']['vars']:
         interface_configs[node_name]['routing-policy'] = routing_policy()

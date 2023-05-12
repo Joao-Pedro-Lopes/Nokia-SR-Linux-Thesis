@@ -28,7 +28,7 @@ for node_name, node_data in data.items():
 for node_name, node_interfaces in interface_configs.items():
     output = json.dumps(node_interfaces, indent=4)
     filename = f'{node_name}_ibgp.json'
-    with open(f'../output/ibgp/{filename}', 'w') as f: # --> change to output/interfaces/{filename} done on test environment
+    with open(f'output/ibgp/{filename}', 'w') as f: # --> change to output/interfaces/{filename} done on test environment
         f.write(output)
         print(f'Wrote ibgp configuration for {node_name} to {filename}')
 

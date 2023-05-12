@@ -34,7 +34,7 @@ def bgp_generator(interface_configs, node_name, node_data, individual):
     elif isinstance(peer_as, str):
         peer_autonomous_systems = [peer_as.strip() for peer_as in peer_as.split(',')]
 
-    config[node_name]['network-instance'][0]['name'] = "default" #FIXME: perguntar Sérgio
+    config[node_name]['network-instance'][0]['name'] = "default"
     config[node_name]['network-instance'][0]['protocols'] = {}
     config[node_name]['network-instance'][0]['protocols']['bgp'] = bgp_underlay_template
 

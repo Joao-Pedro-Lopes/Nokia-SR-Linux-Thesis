@@ -1,4 +1,12 @@
-def ibgp_generator(interface_configs, node_name, node_data):
+def ibgp_generator(interface_configs, node_name, node_data, individual):
+    config = {}
+    if (individual):
+        config[node_name] = {}
+        config[node_name]['network-instance'] = []
+        config[node_name]['network-instance'].append({})
+    else:
+        config[node_name] = interface_configs[node_name]
+
     #TODO: revision with peer-as and local-as
     peer_groups = [peer_g.strip() for peer_g in node_data['config']['vars']['ibgp-peer-group'].split(',')]
     neighbors = [n.strip() for n in node_data['config']['vars']['ibgp-neighbor'].split(',')]
@@ -40,7 +48,14 @@ def ibgp_generator(interface_configs, node_name, node_data):
     elif isinstance(peer_as, str):
         peer_autonomous_systems = [peer_as.strip() for peer_as in peer_as.split(',')]
 
-    interface_configs[node_name]['network-instance'][0]['protocols']['bgp']['group'].append(ibgp_group_template)
+    if individual:
+        config[node_name]['network-instance'][0]['name'] = "default"
+        config[node_name]['network-instance'][0]['protocols'] = {}
+        config[node_name]['network-instance'][0]['protocols']['bgp'] = {}
+        config[node_name]['network-instance'][0]['protocols']['bgp']['group'] = []
+        config[node_name]['network-instance'][0]['protocols']['bgp']['group'].append(ibgp_group_template)
+    else:
+        config[node_name]['network-instance'][0]['protocols']['bgp']['group'].append(ibgp_group_template)
 
     #TODO: check if this logic can be applied to iBGP
     if peer_autonomous_systems != []:
@@ -52,7 +67,11 @@ def ibgp_generator(interface_configs, node_name, node_data):
                 "peer-group": peer_group
             }
 
-            interface_configs[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(ibgp_neighbor_template)
+            if individual:
+                config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'] = []
+                config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(ibgp_neighbor_template)
+            else:
+                config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(ibgp_neighbor_template)
     else:
         for i, (peer_group, neighbor) in enumerate(zip(peer_groups, neighbors)):
             ibgp_neighbor_template = {
@@ -64,6 +83,10 @@ def ibgp_generator(interface_configs, node_name, node_data):
                 }
             }
 
-            interface_configs[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(ibgp_neighbor_template)
+            if individual:
+                config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'] = []
+                config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(ibgp_neighbor_template)
+            else:
+                config[node_name]['network-instance'][0]['protocols']['bgp']['neighbor'].append(ibgp_neighbor_template)
     
-    return interface_configs
+    return config

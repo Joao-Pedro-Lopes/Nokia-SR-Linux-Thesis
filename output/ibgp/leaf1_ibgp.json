@@ -1,0 +1,50 @@
+{
+    "network-instance": [
+        {
+            "name": "default",
+            "protocols": {
+                "bgp": {
+                    "group": [
+                        {
+                            "group-name": "iBGP-overlay",
+                            "export-policy": "all",
+                            "import-policy": "all",
+                            "peer-as": 100,
+                            "ipv4-unicast": {
+                                "admin-state": "disable"
+                            },
+                            "evpn": {
+                                "admin-state": "enable"
+                            },
+                            "local-as": [
+                                {
+                                    "as-number": 100
+                                }
+                            ]
+                        }
+                    ],
+                    "neighbor": [
+                        {
+                            "peer-address": "10.0.0.1",
+                            "admin-state": "enable",
+                            "peer-group": "iBGP-overlay",
+                            "transport": {
+                                "local-address": "10.0.0.2"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "routing-policy": {
+        "policy": [
+            {
+                "name": "all",
+                "default-action": {
+                    "policy-result": "accept"
+                }
+            }
+        ]
+    }
+}
