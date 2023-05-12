@@ -16,21 +16,21 @@ topology:
       type: ixrd2
       config:
         vars:
-          interface: ethernet-1/49, system0
-          network-instance: default
-          subinterface: 0, 0
+          interface: ethernet-1/49, system0 #pode ser por default -- vem na secção de links (system0 sempre atribuido por default com ip loopback)
+          network-instance: default #pode ser por default
+          subinterface: 0, 0 #pode ser por default -- sempre 0
           ipv4-address: 192.168.11.1/30, 10.0.0.1/32
           as: 101
           bgp-underlay: true
-          bgp-group: eBGP-underlay
-          bgp-router-id: 10.0.0.1
+          bgp-group: eBGP-underlay #pode ser por default
+          bgp-router-id: 10.0.0.1 #igual ao ip de loopback -- que vem de atribuição 
           bgp-peer-as: 201
-          bgp-peer-group: eBGP-underlay
+          bgp-peer-group: eBGP-underlay #pode ser por default
           bgp-neighbor: 192.168.11.2
           ibgp-overlay: true
-          ibgp-group: iBGP-overlay
+          ibgp-group: iBGP-overlay #pode ser por default
           ibgp-peer-as: 100
-          ibgp-peer-group: iBGP-overlay
+          ibgp-peer-group: iBGP-overlay #pode ser por default
           ibgp-neighbor: 10.0.0.2
           ibgp-local-address: 10.0.0.1
     leaf2:
@@ -73,8 +73,8 @@ topology:
           bgp-neighbor: 192.168.11.1, 192.168.12.1
           ibgp-overlay: true
           #ibgp-overlay: false
-          ibgp-route-reflector: true
-          ibgp-cluster-id: 0.0.0.1
+          ibgp-route-reflector: true #deve ser dado como input
+          ibgp-cluster-id: 0.0.0.1 #deve ser dado como input
           ibgp-group: iBGP-overlay
           ibgp-peer-as: 100
           ibgp-peer-group: iBGP-overlay

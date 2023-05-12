@@ -1,0 +1,44 @@
+# Jinja template
+---
+- name: eBGP configuration
+  hosts: clab
+  gather_facts: false
+  tasks:
+    - name: Set protocol eBGP - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]/protocols/bgp
+            value:
+              admin-state: enable
+              autonomous-system: {{ autonomous-system }}
+              router-id: {{ router-id }}
+              group:
+                - group-name: eBGP-underlay
+                  admin-state: enable
+                  export-policy: all
+                  import-policy: all
+                  peer-as: {{ peer-as }}
+                  ipv4-unicast:
+                    admin-state: enable
+                neighbor:
+                  - admin-state: enable
+                    peer-address: {{ peer-address }}
+                    peer-group: eBGP-underlay
+
+      register: set_response_ebgp
+
+    - debug:
+        var: set_response_ebgp
+    
+    - name: Set routing policy - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy/policy[name=all]
+            value:
+              default-action:
+                policy-result: accept
+
+      register: set_response
+
+    - debug:
+        var: set_response

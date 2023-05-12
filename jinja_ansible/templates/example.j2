@@ -1,0 +1,14 @@
+# This is a Jinja template for generating an Ansible playbook to set system information on SR Linux leaf devices
+
+---
+- name: Set leaves
+  hosts: clab
+  gather_facts: false
+  tasks:
+    - name: Set system information with values
+      nokia.srlinux.config:
+        update:
+          - path: /system/information
+            value:
+              location: "{{ location }}"
+              contact: "{{ contact }}"

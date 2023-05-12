@@ -1,0 +1,45 @@
+# Jinja template
+---
+- name: iBGP configuration
+  hosts: clab
+  gather_facts: false
+  tasks:
+    - name: Set protocol iBGP - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]/protocols/bgp
+            value:
+              group:
+                - group-name: iBGP-overlay
+                  admin-state: enable
+                  export-policy: all
+                  import-policy: all
+                  peer-as: {{ peer-as }}
+                  ipv4-unicast:
+                    admin-state: enable
+                  evpn:
+                    admin-state: enable
+                  local-as:
+                    - as-number: {{ peer-as }}
+                neighbor:
+                  - admin-state: enable
+                    peer-address: {{ peer-address }}
+                    peer-group: iBGP-overlay
+
+      register: set_response_ebgp
+
+    - debug:
+        var: set_response_ebgp
+    
+    - name: Set routing policy - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy/policy[name=all]
+            value:
+              default-action:
+                policy-result: accept
+
+      register: set_response
+
+    - debug:
+        var: set_response
