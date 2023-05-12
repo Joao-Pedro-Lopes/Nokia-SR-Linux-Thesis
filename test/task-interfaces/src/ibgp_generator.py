@@ -63,6 +63,7 @@ def ibgp_generator(interface_configs, node_name, node_data, individual):
             #TODO: revision
             ibgp_neighbor_template = {
                 "peer-address": neighbor,
+                'admin-state': 'enable',
                 "peer-as": int(peer_autonomous_system),
                 "peer-group": peer_group
             }

@@ -42,6 +42,7 @@ def bgp_generator(interface_configs, node_name, node_data, individual):
     if peer_autonomous_systems != []:
         for i, (peer_autonomous_system, peer_group, neighbor) in enumerate(zip(peer_autonomous_systems, peer_groups, neighbors)):
             bgp_neighbor_template = {
+                'admin-state': 'enable',
                 'peer-address': neighbor,
                 'peer-as': int(peer_autonomous_system),
                 'peer-group': peer_group
@@ -51,6 +52,7 @@ def bgp_generator(interface_configs, node_name, node_data, individual):
     else:
         for i, (peer_group, neighbor) in enumerate(zip(peer_groups, neighbors)):
             bgp_neighbor_template = {
+                'admin-state': 'enable',
                 'peer-address': neighbor,
                 'peer-group': peer_group
             }
