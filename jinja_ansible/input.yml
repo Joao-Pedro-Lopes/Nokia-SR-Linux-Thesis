@@ -12,28 +12,28 @@ topology:
       type: ixrd2
       config:
         vars:
-          # ? type: leaf
-          interface-name: ethernet-1/49
-          ip-address-p2p: 192.168.11.1/30
-          ip-address-loopback: 10.0.0.1/32
+          type: leaf
+          #interface-name: ethernet-1/49
+          #ip-address-p2p: 192.168.11.1/30
+          #ip-address-loopback: 10.0.0.1/32
     leaf2:
       kind: srl
       type: ixrd2
       config:
         vars:
-          # ? type: leaf
-          interface-name: ethernet-1/49
-          ip-address-p2p: 192.168.12.1/30
-          ip-address-loopback: 10.0.0.2/32
+          type: leaf
+          #interface-name: ethernet-1/49
+          #ip-address-p2p: 192.168.12.1/30
+          #ip-address-loopback: 10.0.0.2/32
     spine1:
       kind: srl
       type: ixrd3
       config:
         vars:
-          # ? type: spine
-          interface-name: ethernet-1/1
-          ip-address-p2p: 192.168.11.2/30
-          ip-address-loopback: 10.0.1.1/32
+          type: spine
+          #interface-name: ethernet-1/1
+          #ip-address-p2p: 192.168.11.2/30
+          #ip-address-loopback: 10.0.1.1/32
     srv1:
       kind: linux
     srv2:

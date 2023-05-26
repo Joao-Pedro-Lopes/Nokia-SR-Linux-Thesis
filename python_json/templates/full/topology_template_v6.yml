@@ -32,7 +32,7 @@ topology:
           ibgp-peer-as: 100
           ibgp-peer-group: iBGP-overlay #pode ser por default
           ibgp-neighbor: 10.0.0.2
-          ibgp-local-address: 10.0.0.1
+          ibgp-local-address: 10.0.0.1 #igual ao ip de loopback????
     leaf2:
       kind: srl
       type: ixrd2

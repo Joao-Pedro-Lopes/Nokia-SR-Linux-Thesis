@@ -25,7 +25,28 @@
 
     - debug:
         var: set_response_p2p_1
+    
+    - name: Set p2p interface configuration - leaf1
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name="ethernet-1/1"]
+            value:
+              admin-state: enable
+              description: "interface description set with Ansible"
+              subinterface:
+                - index: 0
+                  admin-state: enable
+                  description: "subinterface description set with Ansible"
+                  ipv4:
+                    admin-state: enable
+                    address:
+                      - ip-prefix: "192.168.11.10/30"
 
+      register: set_response_p2p_2
+
+    - debug:
+        var: set_response_p2p_2
+    
     - name: Set loopback interface configuration - leaf1
       nokia.srlinux.config:
         update:
@@ -42,8 +63,7 @@
                     address:
                       - ip-prefix: "10.0.0.1/32"
 
-      register: set_response_loopback_1
+      register: set_response_loopback
 
     - debug:
-        var: set_response_loopback_1
-    
+        var: set_response_loopback

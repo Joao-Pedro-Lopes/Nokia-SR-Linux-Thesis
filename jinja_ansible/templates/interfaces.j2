@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
     {% for interface in interfaces %}
-    - name: Set p2p interface configuration - {{ interface['node'] }}
+    - name: Set p2p interface configuration - {{ node }}
       nokia.srlinux.config:
         update:
           - path: /interface[name="{{ interface['interface-name'] }}"]
@@ -25,8 +25,8 @@
 
     - debug:
         var: set_response_p2p_{{ loop.index }}
-
-    - name: Set loopback interface configuration - {{ interface['node'] }}
+    {% endfor %}
+    - name: Set loopback interface configuration - {{ node }}
       nokia.srlinux.config:
         update:
           - path: /interface[name=system0]
@@ -40,10 +40,9 @@
                   ipv4:
                     admin-state: enable
                     address:
-                      - ip-prefix: "{{ interface['ip-address-loopback'] }}"
+                      - ip-prefix: "{{ ip_address_loopback }}"
 
-      register: set_response_loopback_{{ loop.index }}
+      register: set_response_loopback
 
     - debug:
-        var: set_response_loopback_{{ loop.index }}
-    {% endfor %}
+        var: set_response_loopback
