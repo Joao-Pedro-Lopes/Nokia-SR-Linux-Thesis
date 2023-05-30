@@ -1,20 +1,31 @@
-def config_template(config_type, node, config):
-    if config_type == 'interfaces':
-        # Gather interface variables
-        interfaces = []
-        for interface in config['config']['vars']['interfaces']:
-            interface_variable = {
-                'interface-name': interface.get('interface-name', ''),
-                'ip-address-p2p': interface.get('ip-address-p2p', ''),
-            }
-            interfaces.append(interface_variable)
-        
-        return {
-            'interfaces': interfaces,
+def config_interfaces(node, interface_ips):
+    interfaces = []
+    for intf, ip in interface_ips[node].items():
+        # Create a dictionary for each interface
+        interface = {
+            'interface-name': f'ethernet-{intf.replace("e", "")}',
+            'ip-address-p2p': ip,
         }
-    else:
-        return None
+        interfaces.append(interface)
+    
+    return {'interfaces': interfaces}
 
+def config_ebgp(node, as_numbers, loopback_ips, neighbors):
+    ebgp = {
+        'autonomous-system': as_numbers[node],
+        'router-id': loopback_ips[node],
+    }
+
+    peers = []
+    for neighbors_dict in neighbors.values(): # Main node
+        for neighbor_dict in neighbors_dict.values(): # Neighbor node
+            peer = {
+                'peer-as': neighbor_dict["as"],
+                'peer-address': neighbor_dict["ip"],
+            }
+            peers.append(peer)
+
+    return {'ebgp': ebgp, 'peers': peers}
 
 
 """def config_template(config_type, node, config):

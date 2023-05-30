@@ -2,8 +2,9 @@ import os
 import sys
 import yaml
 from jinja2 import Template
-from config_template import config_template
+from config_template import config_interfaces, config_ebgp
 from generate_ip_addresses import generate_ip_addresses
+from generate_as_numbers import generate_as_numbers
 
 # Create the "playbooks" folder if it doesn't exist
 os.makedirs('../playbooks', exist_ok=True)
@@ -16,39 +17,31 @@ with open(f'../templates/{config_type}.j2', 'r') as template_file:
     template = Template(template_file.read())
 
 # Read the data from the input YAML file
-with open('../input.yml', 'r') as yaml_file:
+with open('../inputs/input.yml', 'r') as yaml_file:
     data = yaml.safe_load(yaml_file)
     nodes = data['topology']['nodes']
 
 # Generate IP addresses
-interface_ips, loopback_ips = generate_ip_addresses(data)
+interface_ips, loopback_ips, neighbors = generate_ip_addresses(data)
+
+# Generate and attribute AS numbers
+as_numbers, neighbors = generate_as_numbers(data, range(64512, 65500), neighbors)
 
 # Iterate over each node and generate a playbook
 for node, config in nodes.items():
     if 'config' in config and 'vars' in config['config']:
         # Prepare the necessary inputs for the Jinja template
-        interfaces = []
-        for intf, ip in interface_ips[node].items():
-            # Create a dictionary for each interface
-            interface = {
-                'interface-name': f'ethernet-{intf.replace("e", "")}',
-                'ip-address-p2p': ip,
-            }
-            interfaces.append(interface)
-
-        # Store all interface dictionaries in the 'config' dictionary
-        config['config']['vars']['interfaces'] = interfaces
-
-        variables = config_template(config_type, node, config)
-        if variables is None: 
-            print('Invalid configuration type.')
-            sys.exit()
-
-        # Render the template with the necessary inputs
-        rendered_playbook = template.render(interfaces=variables['interfaces'], node=node, ip_address_loopback=loopback_ips[node])
+        if config_type == 'interfaces':
+            variables = config_interfaces(node, interface_ips)
+            # Render the template with the necessary inputs
+            rendered_playbook = template.render(interfaces=variables['interfaces'], node=node, ip_address_loopback=loopback_ips[node])
+        if config_type == 'ebgp':
+            variables = config_ebgp(node, as_numbers, loopback_ips, neighbors)
+            # Render the template with the necessary inputs
+            rendered_playbook = template.render(variables)
 
         # Write the rendered playbook to a file
-        playbook_filename = f"../playbooks/generated_playbook_{node}.yml"
+        playbook_filename = f"../playbooks/{config_type}_{node}_generated_playbook.yml"
         with open(playbook_filename, 'w') as playbook_file:
             playbook_file.write(rendered_playbook)
 

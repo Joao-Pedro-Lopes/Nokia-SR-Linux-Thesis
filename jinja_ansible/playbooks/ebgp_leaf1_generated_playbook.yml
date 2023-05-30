@@ -4,26 +4,26 @@
   hosts: clab
   gather_facts: false
   tasks:
-    - name: Set protocol eBGP - {{ node }}
+    - name: Set protocol eBGP - 
       nokia.srlinux.config:
         update:
           - path: /network-instance[name=default]/protocols/bgp
             value:
               admin-state: enable
-              autonomous-system: {{ ebgp['autonomous-system'] }}
-              router-id: {{ ebgp['router-id'] }}
+              autonomous-system: 64512
+              router-id: 10.0.0.1/32
               group:
                 - group-name: eBGP-underlay
                   admin-state: enable
                   export-policy: all
                   import-policy: all
-                  #peer-as: {{ ebgp['peer-as'] }}
+                  #peer-as: 
                   ipv4-unicast:
                     admin-state: enable
                 neighbor:
                   - admin-state: enable
-                    peer-address: {{ ebgp['peer-address'] }}
-                    peer-as: {{ ebgp['peer-as'] }}
+                    peer-address: 
+                    peer-as: 
                     peer-group: eBGP-underlay
 
       register: set_response_ebgp
@@ -31,7 +31,7 @@
     - debug:
         var: set_response_ebgp
     
-    - name: Set routing policy - {{ node }}
+    - name: Set routing policy - 
       nokia.srlinux.config:
         update:
           - path: /routing-policy/policy[name=all]

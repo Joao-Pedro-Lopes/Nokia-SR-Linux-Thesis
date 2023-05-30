@@ -1,0 +1,60 @@
+name: test
+
+topology:
+  kinds:
+    srl:
+      image: ghcr.io/nokia/srlinux:22.11.1
+    linux:
+      image: ghcr.io/hellt/network-multitool
+  nodes:
+    leaf1:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          type: leaf
+    leaf2:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          type: leaf
+    leaf3:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          type: leaf
+    spine1:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          type: spine
+    spine2:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          type: spine
+    spine3:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          type: spine
+    srv1:
+      kind: linux
+    srv2:
+      kind: linux
+
+  links:
+    # inter-switch links
+    - endpoints: ["leaf1:e1-49", "spine1:e1-1"]
+    - endpoints: ["leaf2:e1-49", "spine1:e1-2"]
+    - endpoints: ["leaf1:e1-50", "spine2:e1-1"]
+    - endpoints: ["leaf2:e1-50", "spine2:e1-2"]
+    - endpoints: ["leaf3:e1-49", "spine3:e1-1"]
+    # server links
+    - endpoints: ["srv1:eth1", "leaf1:e1-1"]
+    - endpoints: ["srv2:eth1", "leaf2:e1-1"]
