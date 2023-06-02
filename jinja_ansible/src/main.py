@@ -31,14 +31,18 @@ as_numbers, neighbors = generate_as_numbers(data, range(64512, 65500), neighbors
 for node, config in nodes.items():
     if 'config' in config and 'vars' in config['config']:
         # Prepare the necessary inputs for the Jinja template
+
+        # Construct the host_name variable
+        host_name = f'clab-{data["name"]}-{node}'
+
         if config_type == 'interfaces':
             variables = config_interfaces(node, interface_ips)
             # Render the template with the necessary inputs
-            rendered_playbook = template.render(interfaces=variables['interfaces'], node=node, ip_address_loopback=loopback_ips[node])
+            rendered_playbook = template.render(host_name=host_name, interfaces=variables['interfaces'], node=node, ip_address_loopback=loopback_ips[node])
         if config_type == 'ebgp':
             variables = config_ebgp(node, as_numbers, loopback_ips, neighbors[node])
             # Render the template with the necessary inputs
-            rendered_playbook = template.render(node=node, ebgp=variables['ebgp'], neighbors=variables['peers'])
+            rendered_playbook = template.render(host_name=host_name, node=node, ebgp=variables['ebgp'], neighbors=variables['peers'])
 
         # Write the rendered playbook to a file
         playbook_filename = f"../playbooks/{config_type}_{node}_generated_playbook.yml"

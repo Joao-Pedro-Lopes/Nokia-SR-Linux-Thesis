@@ -1,0 +1,5 @@
+# Ignore specific directories
+**/config/tls/
+
+# Ignore specific files
+**/config/aaamgr_local_user.json

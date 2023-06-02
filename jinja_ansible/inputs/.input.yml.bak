@@ -1,0 +1,48 @@
+name: test
+
+topology:
+  kinds:
+    srl:
+      image: ghcr.io/nokia/srlinux:23.3.1
+    linux:
+      image: ghcr.io/hellt/network-multitool
+  nodes:
+    leaf1:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          type: leaf
+          #interface-name: ethernet-1/49
+          #ip-address-p2p: 192.168.11.1/30
+          #ip-address-loopback: 10.0.0.1/32
+    leaf2:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          type: leaf
+          #interface-name: ethernet-1/49
+          #ip-address-p2p: 192.168.12.1/30
+          #ip-address-loopback: 10.0.0.2/32
+    spine1:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          type: spine
+          #interface-name: ethernet-1/1
+          #ip-address-p2p: 192.168.11.2/30
+          #ip-address-loopback: 10.0.1.1/32
+    srv1:
+      kind: linux
+    srv2:
+      kind: linux
+
+  links:
+    # inter-switch links
+    - endpoints: ["leaf1:e1-49", "spine1:e1-1"]
+    - endpoints: ["leaf2:e1-49", "spine1:e1-2"]
+    # server links
+    - endpoints: ["srv1:eth1", "leaf1:e1-1"]
+    - endpoints: ["srv2:eth1", "leaf2:e1-1"]

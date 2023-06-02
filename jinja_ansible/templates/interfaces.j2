@@ -1,7 +1,7 @@
 # Jinja template
 ---
 - name: Add interface
-  hosts: clab
+  hosts: {{ host_name }}
   gather_facts: false
   tasks:
     {% for interface in interfaces %}

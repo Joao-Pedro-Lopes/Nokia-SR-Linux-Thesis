@@ -1,7 +1,7 @@
 # Jinja template
 ---
 - name: Add interface
-  hosts: clab
+  hosts: clab-test-leaf1
   gather_facts: false
   tasks:
     

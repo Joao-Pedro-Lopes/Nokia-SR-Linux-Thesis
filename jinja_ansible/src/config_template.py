@@ -13,7 +13,7 @@ def config_interfaces(node, interface_ips):
 def config_ebgp(node, as_numbers, loopback_ips, neighbors):
     ebgp = {
         'autonomous-system': as_numbers[node],
-        'router-id': loopback_ips[node],
+        'router-id': loopback_ips[node].split("/")[0],
     }
 
     peers = []
