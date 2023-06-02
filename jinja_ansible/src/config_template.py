@@ -18,12 +18,12 @@ def config_ebgp(node, as_numbers, loopback_ips, neighbors):
 
     peers = []
     for neighbors_dict in neighbors.values(): # Main node
-        for neighbor_dict in neighbors_dict.values(): # Neighbor node
-            peer = {
-                'peer-as': neighbor_dict["as"],
-                'peer-address': neighbor_dict["ip"],
-            }
-            peers.append(peer)
+        #for neighbor_dict in neighbors_dict.values(): # Neighbor node -- now neighbors is for the specific node (don't need this)
+        peer = {
+            'peer-as': neighbors_dict["as"],
+            'peer-address': neighbors_dict["ip"],
+        }
+        peers.append(peer)
 
     return {'ebgp': ebgp, 'peers': peers}
 

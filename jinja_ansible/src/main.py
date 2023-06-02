@@ -36,9 +36,9 @@ for node, config in nodes.items():
             # Render the template with the necessary inputs
             rendered_playbook = template.render(interfaces=variables['interfaces'], node=node, ip_address_loopback=loopback_ips[node])
         if config_type == 'ebgp':
-            variables = config_ebgp(node, as_numbers, loopback_ips, neighbors)
+            variables = config_ebgp(node, as_numbers, loopback_ips, neighbors[node])
             # Render the template with the necessary inputs
-            rendered_playbook = template.render(variables)
+            rendered_playbook = template.render(node=node, ebgp=variables['ebgp'], neighbors=variables['peers'])
 
         # Write the rendered playbook to a file
         playbook_filename = f"../playbooks/{config_type}_{node}_generated_playbook.yml"
@@ -47,4 +47,6 @@ for node, config in nodes.items():
 
         print(f"Generated playbook for {node}: {playbook_filename}")
 
-
+""" - name: Create configuration files
+      ansible.builtin.command: |
+        python3 src/main.py ../topology_template_v5.yml """

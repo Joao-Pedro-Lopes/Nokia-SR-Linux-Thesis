@@ -8,15 +8,18 @@
     - name: Set p2p interface configuration - {{ node }}
       nokia.srlinux.config:
         update:
-          - path: /interface[name={{ interface['interface-name'] }}]
+          - path: /interface[name="{{ interface['interface-name'] }}"]
             value:
               admin-state: enable
               description: "interface description set with Ansible"
-          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]
-            value:
-              admin-state: enable
-              description: "subinterface description set with Ansible"
-          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]/ipv4/address[ip-prefix={{ interface['ip-address-p2p'] }}]
+              subinterface:
+                - index: 0
+                  admin-state: enable
+                  description: "subinterface description set with Ansible"
+                  ipv4:
+                    admin-state: enable
+                    address:
+                      - ip-prefix: "{{ interface['ip-address-p2p'] }}"
 
       register: set_response_p2p_{{ loop.index }}
 
@@ -30,11 +33,14 @@
             value:
               admin-state: enable
               description: "interface description set with Ansible"
-          - path: /interface[name=system0]/subinterface[index=0]
-            value:
-              admin-state: enable
-              description: "subinterface description set with Ansible"
-          - path: /interface[name=system0]/subinterface[index=0]/ipv4/address[ip-prefix={{ ip_address_loopback }}]
+              subinterface:
+                - index: 0
+                  admin-state: enable
+                  description: "subinterface description set with Ansible"
+                  ipv4:
+                    admin-state: enable
+                    address:
+                      - ip-prefix: "{{ ip_address_loopback }}"
 
       register: set_response_loopback
 

@@ -4,7 +4,7 @@
   hosts: clab
   gather_facts: false
   tasks:
-    - name: Set protocol eBGP - 
+    - name: Set protocol eBGP - leaf1
       nokia.srlinux.config:
         update:
           - path: /network-instance[name=default]/protocols/bgp
@@ -12,26 +12,26 @@
               admin-state: enable
               autonomous-system: 64512
               router-id: 10.0.0.1/32
-              group:
-                - group-name: eBGP-underlay
-                  admin-state: enable
-                  export-policy: all
-                  import-policy: all
-                  #peer-as: 
-                  ipv4-unicast:
-                    admin-state: enable
-                neighbor:
-                  - admin-state: enable
-                    peer-address: 
-                    peer-as: 
-                    peer-group: eBGP-underlay
-
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]  
+            value:
+              admin-state: enable
+              export-policy: all
+              import-policy: all
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]/ipv4-unicast
+            value:
+              admin-state: enable
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=192.168.11.2] 
+            value:
+              admin-state: enable
+              peer-as: 64514
+              peer-group: eBGP-underlay
+          
       register: set_response_ebgp
 
     - debug:
         var: set_response_ebgp
     
-    - name: Set routing policy - 
+    - name: Set routing policy - leaf1
       nokia.srlinux.config:
         update:
           - path: /routing-policy/policy[name=all]

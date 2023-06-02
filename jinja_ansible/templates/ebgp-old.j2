@@ -12,20 +12,22 @@
               admin-state: enable
               autonomous-system: {{ ebgp['autonomous-system'] }}
               router-id: {{ ebgp['router-id'] }}
-          - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]  
-            value:
-              admin-state: enable
-              export-policy: all
-              import-policy: all
-          - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]/ipv4-unicast
-            value:
-              admin-state: enable
-          {% for neighbor in neighbors %}- path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}] 
-            value:
-              admin-state: enable
-              peer-as: {{ neighbor['peer-as'] }}
-              peer-group: eBGP-underlay
-          {% endfor %}
+              group:
+                - group-name: eBGP-underlay
+                  admin-state: enable
+                  export-policy: all
+                  import-policy: all
+                  #peer-as: {{ ebgp['peer-as'] }}
+                  ipv4-unicast:
+                    admin-state: enable
+                {% for neighbor in neighbors %}
+                neighbor:
+                  - admin-state: enable
+                    peer-address: {{ neighbor['peer-address'] }}
+                    peer-as: {{ neighbor['peer-as'] }}
+                    peer-group: eBGP-underlay
+                    {% endfor %}
+                    
       register: set_response_ebgp
 
     - debug:
