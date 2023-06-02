@@ -11,10 +11,10 @@
             value:
               policy-result: accept
 
-      register: set_response
+      register: set_response_routing_policy_ebgp
 
     - debug:
-        var: set_response
+        var: set_response_routing_policy_ebgp
     
     - name: Set protocol eBGP - leaf1
       nokia.srlinux.config:

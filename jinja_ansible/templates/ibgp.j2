@@ -1,45 +1,44 @@
 # Jinja template
 ---
 - name: iBGP configuration
-  hosts: clab
+  hosts: {{ host_name }}
   gather_facts: false
   tasks:
+    - name: Set routing policy - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy/policy[name=all]/default-action
+            value:
+              policy-result: accept
+
+      register: set_response_routing_policy_ibgp
+
+    - debug:
+        var: set_response_routing_policy_ibgp
+    
     - name: Set protocol iBGP - {{ node }}
       nokia.srlinux.config:
         update:
           - path: /network-instance[name=default]/protocols/bgp
             value:
-              group:
-                - group-name: iBGP-overlay
-                  admin-state: enable
-                  export-policy: all
-                  import-policy: all
-                  peer-as: {{ peer-as }}
-                  ipv4-unicast:
-                    admin-state: enable
-                  evpn:
-                    admin-state: enable
-                  local-as:
-                    - as-number: {{ peer-as }}
-                neighbor:
-                  - admin-state: enable
-                    peer-address: {{ peer-address }}
-                    peer-group: iBGP-overlay
-
-      register: set_response_ebgp
-
-    - debug:
-        var: set_response_ebgp
-    
-    - name: Set routing policy - {{ node }}
-      nokia.srlinux.config:
-        update:
-          - path: /routing-policy/policy[name=all]
+              admin-state: enable
+              autonomous-system: {{ ibgp['autonomous-system'] }}
+              router-id: {{ ibgp['router-id'] }}
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]  
             value:
-              default-action:
-                policy-result: accept
-
-      register: set_response
+              admin-state: enable
+              export-policy: all
+              import-policy: all
+          - path: /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=ipv4-unicast]
+            value:
+              admin-state: enable
+          {% for neighbor in neighbors %}- path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}] 
+            value:
+              admin-state: enable
+              peer-as: {{ neighbor['peer-as'] }}
+              peer-group: iBGP-overlay
+          {% endfor %}
+      register: set_response_ibgp
 
     - debug:
-        var: set_response
+        var: set_response_ibgp
