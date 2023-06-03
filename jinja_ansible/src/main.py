@@ -43,6 +43,10 @@ for node, config in nodes.items():
             variables = config_ebgp(node, as_numbers, loopback_ips, neighbors[node])
             # Render the template with the necessary inputs
             rendered_playbook = template.render(host_name=host_name, node=node, ebgp=variables['ebgp'], neighbors=variables['peers'])
+        if config_type == 'ibgp':
+            variables = config_ibgp(node, as_numbers, loopback_ips, neighbors[node])
+            # Render the template with the necessary inputs
+            rendered_playbook = template.render(host_name=host_name, node=node, ebgp=variables['ebgp'], neighbors=variables['peers'])
 
         # Write the rendered playbook to a file
         playbook_filename = f"../playbooks/{config_type}_{node}_generated_playbook.yml"

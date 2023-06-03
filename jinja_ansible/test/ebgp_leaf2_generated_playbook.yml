@@ -1,0 +1,44 @@
+# Jinja template
+---
+- name: eBGP configuration
+  hosts: clab-test-leaf2
+  gather_facts: false
+  tasks:
+    - name: Set routing policy - leaf2
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy/policy[name=all]/default-action
+            value:
+              policy-result: accept
+
+      register: set_response_routing_policy_ebgp
+
+    - debug:
+        var: set_response_routing_policy_ebgp
+    
+    - name: Set protocol eBGP - leaf2
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]/protocols/bgp
+            value:
+              admin-state: enable
+              autonomous-system: 64513
+              router-id: 10.0.0.3
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]  
+            value:
+              admin-state: enable
+              export-policy: all
+              import-policy: all
+          - path: /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=ipv4-unicast]
+            value:
+              admin-state: enable
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=192.168.11.6] 
+            value:
+              admin-state: enable
+              peer-as: 64514
+              peer-group: eBGP-underlay
+          
+      register: set_response_ebgp
+
+    - debug:
+        var: set_response_ebgp

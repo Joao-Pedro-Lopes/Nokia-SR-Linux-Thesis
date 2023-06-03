@@ -19,19 +19,11 @@
     - name: Set protocol iBGP - {{ node }}
       nokia.srlinux.config:
         update:
-          - path: /network-instance[name=default]/protocols/bgp
-            value:
-              admin-state: enable
-              autonomous-system: {{ ibgp['autonomous-system'] }}
-              router-id: {{ ibgp['router-id'] }}
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]  
             value:
               admin-state: enable
               export-policy: all
               import-policy: all
-          - path: /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=ipv4-unicast]
-            value:
-              admin-state: enable
           {% for neighbor in neighbors %}- path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}] 
             value:
               admin-state: enable

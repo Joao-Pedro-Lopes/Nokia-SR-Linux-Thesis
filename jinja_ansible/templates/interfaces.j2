@@ -16,7 +16,11 @@
             value:
               admin-state: enable
               description: "subinterface description set with Ansible"
+          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]/ipv4
+            value:
+              admin-state: enable
           - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]/ipv4/address[ip-prefix={{ interface['ip-address-p2p'] }}]
+          - path: /network-instance[name=default]/interface[name={{ interface['interface-name'] }}.0]
 
       register: set_response_p2p_{{ loop.index }}
 
@@ -34,7 +38,11 @@
             value:
               admin-state: enable
               description: "subinterface description set with Ansible"
+          - path: /interface[name=system0]/subinterface[index=0]/ipv4
+            value:
+              admin-state: enable
           - path: /interface[name=system0]/subinterface[index=0]/ipv4/address[ip-prefix={{ ip_address_loopback }}]
+          - path: /network-instance[name=default]/interface[name=system0.0]
 
       register: set_response_loopback
 
