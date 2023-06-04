@@ -1,10 +1,10 @@
 # Jinja template
 ---
 - name: iBGP configuration
-  hosts: {{ host_name }}
+  hosts: clab-test-spine1
   gather_facts: false
   tasks:
-    - name: Set routing policy - {{ node }}
+    - name: Set routing policy - spine1
       nokia.srlinux.config:
         update:
           - path: /routing-policy/policy[name=all]/default-action
@@ -16,7 +16,7 @@
     - debug:
         var: set_response_routing_policy_ibgp
     
-    - name: Set protocol iBGP - {{ node }}
+    - name: Set protocol iBGP - spine1
       nokia.srlinux.config:
         update:
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]  
@@ -29,17 +29,26 @@
               admin-state: enable
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/local-as 
             value:
-              as-number: {{ ibgp['as-number'] }}
-          {% for neighbor in neighbors %}
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}] 
+              as-number: XXX
+          
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=ZZZ] 
             value:
               admin-state: enable
-              peer-as: {{ neighbor['peer-as'] }}
+              peer-as: YYY
               peer-group: iBGP-overlay
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}]/transport
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=ZZZ]/transport
             value:
-              local-address: {{ neighbor['local-address'] }}
-          {% endfor %}
+              local-address: 10.0.0.2
+          
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=ZZZ] 
+            value:
+              admin-state: enable
+              peer-as: YYY
+              peer-group: iBGP-overlay
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=ZZZ]/transport
+            value:
+              local-address: 10.0.0.2
+          
       register: set_response_ibgp
 
     - debug:

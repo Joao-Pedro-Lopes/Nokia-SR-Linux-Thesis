@@ -2,7 +2,7 @@ import os
 import sys
 import yaml
 from jinja2 import Template
-from config_template import config_interfaces, config_ebgp
+from config_template import config_interfaces, config_ebgp, config_ibgp
 from generate_ip_addresses import generate_ip_addresses
 from generate_as_numbers import generate_as_numbers
 
@@ -46,7 +46,7 @@ for node, config in nodes.items():
         if config_type == 'ibgp':
             variables = config_ibgp(node, as_numbers, loopback_ips, neighbors[node])
             # Render the template with the necessary inputs
-            rendered_playbook = template.render(host_name=host_name, node=node, ebgp=variables['ebgp'], neighbors=variables['peers'])
+            rendered_playbook = template.render(host_name=host_name, node=node, ibgp=variables['ibgp'], neighbors=variables['peers'])
 
         # Write the rendered playbook to a file
         playbook_filename = f"../playbooks/{config_type}_{node}_generated_playbook.yml"
