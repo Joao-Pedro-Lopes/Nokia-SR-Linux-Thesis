@@ -37,7 +37,7 @@ def config_ibgp(node, as_numbers, loopback_ips, neighbors):
         #for neighbor_dict in neighbors_dict.values(): # Neighbor node -- now neighbors is for the specific node (don't need this)
         peer = {
             'peer-as': "YYY",
-            'peer-address': "ZZZ",
+            'peer-address': neighbors_dict["loopback_ip"],
             'local-address': loopback_ips[node].split("/")[0],
         }
         peers.append(peer)

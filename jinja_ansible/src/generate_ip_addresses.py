@@ -10,7 +10,9 @@ def generate_ip_addresses(data):
     # Generate interface IP addresses for each node
     interface_ips = {}  # node -> interface -> ip
     loopback_ips = {}  # node -> ip
-    neighbors = {}  # node -> [neighbor1, neighbor2, ...]
+    neighbors_bgp = {}  # node -> [neighbor1, neighbor2, ...]
+    neighbors_ibgp = {}  # node -> [neighbor1, neighbor2, ...]
+
     for link in data['topology']['links']:
         # Parse endpoints
         node1, intf1 = link['endpoints'][0].split(':')
@@ -45,16 +47,21 @@ def generate_ip_addresses(data):
             continue
 
         if node1_type in ['leaf', 'spine', 'super-spine']:
-            if node1 not in neighbors:
-                neighbors[node1] = {}
-            #neighbors[node1].append(node2) -- uncomment to check which node is being added
-            #neighbors[node1].append({node2: f"{ip2}"})
-            neighbors[node1][node2] = {"ip": f"{ip2}"}
-        if node2_type in ['leaf', 'spine', 'super-spine']:
-            if node2 not in neighbors:
-                neighbors[node2] = {}
-            #neighbors[node2].append(node1) -- uncomment to check which node is being added
-            #neighbors[node2].append({node1: f"{ip1}"})
-            neighbors[node2][node1] = {"ip": f"{ip1}"}
+            if node1 not in neighbors_bgp:
+                neighbors_bgp[node1] = {}
+            neighbors_bgp[node1][node2] = {"ip": f"{ip2}"}
 
-    return interface_ips, loopback_ips, neighbors
+            if node1 not in neighbors_ibgp:
+                neighbors_ibgp[node1] = {}
+            neighbors_ibgp[node1][node2] = {"loopback_ip": loopback_ips[node2].split("/")[0]}
+
+        if node2_type in ['leaf', 'spine', 'super-spine']:
+            if node2 not in neighbors_bgp:
+                neighbors_bgp[node2] = {}
+            neighbors_bgp[node2][node1] = {"ip": f"{ip1}"}
+
+            if node2 not in neighbors_ibgp:
+                neighbors_ibgp[node2] = {}
+            neighbors_ibgp[node2][node1] = {"loopback_ip": loopback_ips[node1].split("/")[0]}
+
+    return interface_ips, loopback_ips, neighbors_bgp, neighbors_ibgp

@@ -31,12 +31,12 @@
             value:
               as-number: XXX
           
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=ZZZ] 
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2] 
             value:
               admin-state: enable
               peer-as: YYY
               peer-group: iBGP-overlay
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=ZZZ]/transport
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2]/transport
             value:
               local-address: 10.0.0.1
           

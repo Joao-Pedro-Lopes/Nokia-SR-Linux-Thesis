@@ -1,4 +1,4 @@
-def generate_as_numbers(data, as_range, neighbors):
+def generate_as_numbers(data, as_range, neighbors_bgp):
     as_numbers = {}  # node -> AS number
     as_generator = iter(as_range)
     spine_as_numbers = {}  # spine -> AS number
@@ -36,7 +36,7 @@ def generate_as_numbers(data, as_range, neighbors):
         if node_type == 'leaf':
             as_numbers[node] = next(as_generator)
             # Add AS number to neighbor
-            for neighbor in neighbors.values():
+            for neighbor in neighbors_bgp.values():
                 if node in neighbor:
                     neighbor[node]['as'] = as_numbers[node]
 
@@ -49,7 +49,7 @@ def generate_as_numbers(data, as_range, neighbors):
 
             as_numbers[node] = spine_as_numbers[pod]
             # Add AS number to neighbor
-            for neighbor in neighbors.values():
+            for neighbor in neighbors_bgp.values():
                 if node in neighbor:
                     neighbor[node]['as'] = as_numbers[node]
 
@@ -60,11 +60,11 @@ def generate_as_numbers(data, as_range, neighbors):
 
             as_numbers[node] = spine_as_numbers['super-spine']
             # Add AS number to neighbor
-            for neighbor in neighbors.values():
+            for neighbor in neighbors_bgp.values():
                 if node in neighbor:
                     neighbor[node]['as'] = as_numbers[node]
 
-    return as_numbers, neighbors
+    return as_numbers, neighbors_bgp
 
 # 2ND ATTEMPT
 """ def generate_as_numbers(data, leaf_as_range, spine_as_range, super_spine_as_range):
