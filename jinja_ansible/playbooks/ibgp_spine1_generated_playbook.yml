@@ -29,12 +29,12 @@
               admin-state: enable
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/local-as 
             value:
-              as-number: XXX
+              as-number: 100
           
           - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.1] 
             value:
               admin-state: enable
-              peer-as: YYY
+              peer-as: 100
               peer-group: iBGP-overlay
           - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.1]/transport
             value:
@@ -43,7 +43,7 @@
           - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.3] 
             value:
               admin-state: enable
-              peer-as: YYY
+              peer-as: 100
               peer-group: iBGP-overlay
           - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.3]/transport
             value:

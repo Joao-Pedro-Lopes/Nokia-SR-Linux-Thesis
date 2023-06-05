@@ -27,16 +27,16 @@ def config_ebgp(node, as_numbers, loopback_ips, neighbors):
 
     return {'ebgp': ebgp, 'peers': peers}
 
-def config_ibgp(node, as_numbers, loopback_ips, neighbors):
+def config_ibgp(node, as_numbers, loopback_ips, neighbors, ibgp_as_number):
     ibgp = {
-        'as-number': "XXX",
+        'as-number': ibgp_as_number,
     }
 
     peers = []
     for neighbors_dict in neighbors.values(): # Main node
         #for neighbor_dict in neighbors_dict.values(): # Neighbor node -- now neighbors is for the specific node (don't need this)
         peer = {
-            'peer-as': "YYY",
+            'peer-as': ibgp_as_number,
             'peer-address': neighbors_dict["loopback_ip"],
             'local-address': loopback_ips[node].split("/")[0],
         }

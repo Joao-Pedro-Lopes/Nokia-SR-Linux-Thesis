@@ -2,8 +2,8 @@ import ipaddress
 
 def generate_ip_addresses(data):
     # Starting IP addresses
-    p2p_subnet = ipaddress.ip_network('192.168.11.0/24')
-    loopback_subnet = ipaddress.ip_network('10.0.0.0/24')
+    p2p_subnet = ipaddress.ip_network(data['topology']['defaults']['env']['P2P_IP_SUBNET'])
+    loopback_subnet = ipaddress.ip_network(data['topology']['defaults']['env']['LOOPBACK_IP_SUBNET'])
     p2p_subnets = p2p_subnet.subnets(new_prefix=30)
     loopback_addresses = loopback_subnet.hosts()
 

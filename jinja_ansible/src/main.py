@@ -21,11 +21,15 @@ with open('../inputs/input.yml', 'r') as yaml_file:
     data = yaml.safe_load(yaml_file)
     nodes = data['topology']['nodes']
 
+print(data['topology']['defaults']['env'])
+
 # Generate IP addresses
 interface_ips, loopback_ips, neighbors_bgp, neighbors_ibgp = generate_ip_addresses(data)
 
+as_number_min = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[0])
+as_number_max = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[1])
 # Generate and attribute AS numbers for eBGP
-as_numbers, neighbors_bgp = generate_as_numbers(data, range(64512, 65500), neighbors_bgp)
+as_numbers, neighbors_bgp = generate_as_numbers(data, range(as_number_min, as_number_max), neighbors_bgp)
 
 # Iterate over each node and generate a playbook
 for node, config in nodes.items():
@@ -44,7 +48,7 @@ for node, config in nodes.items():
             # Render the template with the necessary inputs
             rendered_playbook = template.render(host_name=host_name, node=node, ebgp=variables['ebgp'], neighbors=variables['peers'])
         if config_type == 'ibgp':
-            variables = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node])
+            variables = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
             # Render the template with the necessary inputs
             rendered_playbook = template.render(host_name=host_name, node=node, ibgp=variables['ibgp'], neighbors=variables['peers'])
 
