@@ -19,24 +19,27 @@
     - name: Set protocol iBGP - leaf1
       nokia.srlinux.config:
         update:
-          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]  
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]
             value:
               admin-state: enable
               export-policy: all
               import-policy: all
-          - path: /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=evpn]
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/afi-safi[afi-safi-name=ipv4-unicast]
+            value:
+              admin-state: disable
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/afi-safi[afi-safi-name=evpn]
             value:
               admin-state: enable
-          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/local-as 
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/local-as
             value:
               as-number: 100
           
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2] 
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.3] 
             value:
               admin-state: enable
               peer-as: 100
               peer-group: iBGP-overlay
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2]/transport
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.3]/transport
             value:
               local-address: 10.0.0.1
           

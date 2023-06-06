@@ -3,14 +3,14 @@ all:
     linux:
       hosts:
         clab-test-srv1:
-          ansible_host: 172.20.20.2
-        clab-test-srv2:
           ansible_host: 172.20.20.3
+        clab-test-srv2:
+          ansible_host: 172.20.20.2
     srl:
       hosts:
         clab-test-leaf1:
-          ansible_host: 172.20.20.6
-        clab-test-leaf2:
           ansible_host: 172.20.20.4
+        clab-test-leaf2:
+          ansible_host: 172.20.20.6
         clab-test-spine1:
           ansible_host: 172.20.20.5

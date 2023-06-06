@@ -1,0 +1,121 @@
+# Jinja template
+---
+- name: Full configuration -- interfaces, eBGP and iBGP
+  hosts: {{ host_name }}
+  gather_facts: false
+  tasks:
+    {% for interface in interfaces %}
+    - name: Set p2p interface configuration - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name={{ interface['interface-name'] }}]
+            value:
+              admin-state: enable
+              description: "interface description set with Ansible"
+          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]
+            value:
+              admin-state: enable
+              description: "subinterface description set with Ansible"
+          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]/ipv4
+            value:
+              admin-state: enable
+          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]/ipv4/address[ip-prefix={{ interface['ip-address-p2p'] }}]
+          - path: /network-instance[name=default]/interface[name={{ interface['interface-name'] }}.0]
+
+      register: set_response_p2p_{{ loop.index }}
+
+    - debug:
+        var: set_response_p2p_{{ loop.index }}
+    {% endfor %}
+    - name: Set loopback interface configuration - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name=system0]
+            value:
+              admin-state: enable
+              description: "interface description set with Ansible"
+          - path: /interface[name=system0]/subinterface[index=0]
+            value:
+              admin-state: enable
+              description: "subinterface description set with Ansible"
+          - path: /interface[name=system0]/subinterface[index=0]/ipv4
+            value:
+              admin-state: enable
+          - path: /interface[name=system0]/subinterface[index=0]/ipv4/address[ip-prefix={{ ip_address_loopback }}]
+          - path: /network-instance[name=default]/interface[name=system0.0]
+
+      register: set_response_loopback
+
+    - debug:
+        var: set_response_loopback
+    
+    - name: Set routing policy - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy/policy[name=all]/default-action
+            value:
+              policy-result: accept
+
+      register: set_response_routing_policy_ebgp
+
+    - debug:
+        var: set_response_routing_policy_ebgp
+    
+    - name: Set protocol eBGP - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]/protocols/bgp
+            value:
+              admin-state: enable
+              autonomous-system: {{ ebgp['autonomous-system'] }}
+              router-id: {{ ebgp['router-id'] }}
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]  
+            value:
+              admin-state: enable
+              export-policy: all
+              import-policy: all
+          - path: /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=ipv4-unicast]
+            value:
+              admin-state: enable
+          {% for neighbor in neighbors_ebgp %}- path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}] 
+            value:
+              admin-state: enable
+              peer-as: {{ neighbor['peer-as'] }}
+              peer-group: eBGP-underlay
+          {% endfor %}
+      register: set_response_ebgp
+
+    - debug:
+        var: set_response_ebgp
+
+    - name: Set protocol iBGP - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]
+            value:
+              admin-state: enable
+              export-policy: all
+              import-policy: all
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/afi-safi[afi-safi-name=ipv4-unicast]
+            value:
+              admin-state: disable
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/afi-safi[afi-safi-name=evpn]
+            value:
+              admin-state: enable
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/local-as
+            value:
+              as-number: {{ ibgp['as-number'] }}
+          {% for neighbor in neighbors_ibgp %}
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}] 
+            value:
+              admin-state: enable
+              peer-as: {{ neighbor['peer-as'] }}
+              peer-group: iBGP-overlay
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}]/transport
+            value:
+              local-address: {{ neighbor['local-address'] }}
+          {% endfor %}
+      register: set_response_ibgp
+
+    - debug:
+        var: set_response_ibgp

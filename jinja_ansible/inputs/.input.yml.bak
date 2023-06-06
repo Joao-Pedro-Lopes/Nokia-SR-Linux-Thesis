@@ -6,6 +6,12 @@ topology:
       image: ghcr.io/nokia/srlinux:23.3.1
     linux:
       image: ghcr.io/hellt/network-multitool
+  defaults:
+    env:
+      P2P_IP_SUBNET: 192.168.11.0/24
+      LOOPBACK_IP_SUBNET: 10.0.0.0/24
+      AS_NUMBER_EBGP_RANGE: 64512-65500
+      AS_NUMBER_IBGP_VALUE: 100
   nodes:
     leaf1:
       kind: srl
