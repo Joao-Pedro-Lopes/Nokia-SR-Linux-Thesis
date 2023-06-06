@@ -24,14 +24,16 @@ def generate_ip_addresses(data):
         # Get subnet for this link
         subnet = next(p2p_subnets)
         ip1, ip2 = subnet.hosts()
-
-        # Save IP addresses
-        if node1 not in interface_ips:
-            interface_ips[node1] = {}
-        if node2 not in interface_ips:
-            interface_ips[node2] = {}
-        interface_ips[node1][intf1] = f"{ip1}/30"
-        interface_ips[node2][intf2] = f"{ip2}/30"
+        
+        # Save IP addresses - check if nodes exist before setting interfaces
+        if data['topology']['nodes'].get(node1, {}).get('config', {}).get('vars', {}).get('type', '') in ['leaf', 'spine', 'super-spine'] and data['topology']['nodes'].get(node2, {}).get('config', {}).get('vars', {}).get('type', '') in ['leaf', 'spine', 'super-spine']:
+            # The if above removes interfaces that connect to servers
+            if node1 not in interface_ips:
+                interface_ips[node1] = {}
+            if node2 not in interface_ips:
+                interface_ips[node2] = {}
+            interface_ips[node1][intf1] = f"{ip1}/30"
+            interface_ips[node2][intf2] = f"{ip2}/30"
 
         # Save loopback addresses
         if node1 not in loopback_ips:

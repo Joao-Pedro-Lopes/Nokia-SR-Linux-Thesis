@@ -27,28 +27,6 @@
     - debug:
         var: set_response_p2p_1
     
-    - name: Set p2p interface configuration - leaf2
-      nokia.srlinux.config:
-        update:
-          - path: /interface[name=ethernet-1/1]
-            value:
-              admin-state: enable
-              description: "interface description set with Ansible"
-          - path: /interface[name=ethernet-1/1]/subinterface[index=0]
-            value:
-              admin-state: enable
-              description: "subinterface description set with Ansible"
-          - path: /interface[name=ethernet-1/1]/subinterface[index=0]/ipv4
-            value:
-              admin-state: enable
-          - path: /interface[name=ethernet-1/1]/subinterface[index=0]/ipv4/address[ip-prefix=192.168.11.14/30]
-          - path: /network-instance[name=default]/interface[name=ethernet-1/1.0]
-
-      register: set_response_p2p_2
-
-    - debug:
-        var: set_response_p2p_2
-    
     - name: Set loopback interface configuration - leaf2
       nokia.srlinux.config:
         update:
@@ -128,12 +106,12 @@
             value:
               as-number: 100
           
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.1] 
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2] 
             value:
               admin-state: enable
               peer-as: 100
               peer-group: iBGP-overlay
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.1]/transport
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2]/transport
             value:
               local-address: 10.0.0.3
           

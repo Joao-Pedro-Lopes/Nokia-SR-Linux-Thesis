@@ -26,6 +26,8 @@ print(data['topology']['defaults']['env'])
 # Generate IP addresses
 interface_ips, loopback_ips, neighbors_bgp, neighbors_ibgp = generate_ip_addresses(data)
 
+print(neighbors_bgp)
+
 as_number_min = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[0])
 as_number_max = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[1])
 # Generate and attribute AS numbers for eBGP
