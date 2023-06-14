@@ -1,0 +1,60 @@
+# Jinja template
+---
+- name: MAC-VRF configuration
+  hosts: {{ host_name }}
+  gather_facts: false
+  tasks:
+    - name: Set routing policy - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy/policy[name=all]/default-action
+            value:
+              policy-result: accept
+
+      register: set_response_routing_policy_mac-vrf
+
+    - debug:
+        var: set_response_routing_policy_mac-vrf
+    
+    - name: Set MAC-VRF network-instance - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=vrf-1]/
+            value:
+              admin-state: enable
+              type: mac-vrf
+          - path: /network-instance[name=vrf-1]/interface[name={{ interface['interface-name'] }}.0]
+          - path: /network-instance[name=vrf-1]/vxlan-interface[name=vxlanX.X]
+
+          - path: /network-instance[name=vrf-1]/protocols/bgp-evpn/bgp-instance[id=1]
+            value:
+              admin-state: enable
+              vxlan-interface: vxlanX.X
+              evi: XXX
+          - path: /network-instance[name=vrf-1]/protocols/bgp-vpn/bgp-instance[id=1]/route-target
+            value:
+              export-rt: target:100:111
+              import-rt: target:100:111
+
+      register: set_response_network-instance_mac-vrf
+
+    - debug:
+        var: set_response_network-instance_mac-vrf
+
+    - name: Set MAC-VRF interface configuration - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name={{ interface['interface-name'] }}]
+            value:
+              vlan-tagging: true
+          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]
+            value:
+              type: bridged
+              admin-state: enable
+          - path: /interface[name={{ interface['interface-name'] }}]/subinterface[index=0]/vlan/encap/untagged
+          - path: /network-instance[name=vrf-1]/interface[name={{ interface['interface-name'] }}.0]
+
+      register: set_response_interface_mac-vrf
+
+      - debug:
+        var: set_response_interface_mac-vrf

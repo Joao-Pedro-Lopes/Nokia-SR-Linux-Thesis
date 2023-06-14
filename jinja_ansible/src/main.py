@@ -2,7 +2,7 @@ import os
 import sys
 import yaml
 from jinja2 import Template
-from config_template import config_interfaces, config_ebgp, config_ibgp
+from config_template import config_interfaces, config_ebgp, config_ibgp, config_mac_vrf
 from generate_ip_addresses import generate_ip_addresses
 from generate_as_numbers import generate_as_numbers
 
@@ -24,9 +24,9 @@ with open('../inputs/input.yml', 'r') as yaml_file:
 print(data['topology']['defaults']['env'])
 
 # Generate IP addresses
-interface_ips, loopback_ips, neighbors_bgp, neighbors_ibgp = generate_ip_addresses(data)
+interface_ips, interface_mac_vrf, loopback_ips, neighbors_bgp, neighbors_ibgp = generate_ip_addresses(data)
 
-print(neighbors_bgp)
+#print(neighbors_bgp)
 
 as_number_min = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[0])
 as_number_max = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[1])
@@ -53,6 +53,12 @@ for node, config in nodes.items():
             variables = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
             # Render the template with the necessary inputs
             rendered_playbook = template.render(host_name=host_name, node=node, ibgp=variables['ibgp'], neighbors=variables['peers'])
+        if config_type == 'mac-vrf':
+            if node not in interface_mac_vrf:
+                continue
+            variables = config_mac_vrf(node, interface_mac_vrf)
+            # Render the template with the necessary inputs
+            rendered_playbook = template.render(host_name=host_name, interface=variables['interface'], node=node)
         if config_type == 'general':
             variables_interfaces = config_interfaces(node, interface_ips)
             variables_ebgp = config_ebgp(node, as_numbers, loopback_ips, neighbors_bgp[node])

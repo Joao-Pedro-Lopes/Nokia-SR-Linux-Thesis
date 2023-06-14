@@ -44,6 +44,14 @@ def config_ibgp(node, as_numbers, loopback_ips, neighbors, ibgp_as_number):
 
     return {'ibgp': ibgp, 'peers': peers}
 
+def config_mac_vrf(node, interface_mac_vrf):
+    # Create a dictionary for each interface
+    interface = {
+        'interface-name': f'ethernet-{interface_mac_vrf[node].replace("e", "")}',
+    }
+    
+    return {'interface': interface}
+
 """def config_template(config_type, node, config):
     print(config_type)
     print(node)

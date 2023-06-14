@@ -9,6 +9,7 @@ def generate_ip_addresses(data):
 
     # Generate interface IP addresses for each node
     interface_ips = {}  # node -> interface -> ip
+    interface_mac_vrf = {}  # dictionary for servers
     loopback_ips = {}  # node -> ip
     neighbors_bgp = {}  # node -> [neighbor1, neighbor2, ...]
     neighbors_ibgp = {}  # node -> [neighbor1, neighbor2, ...]
@@ -34,6 +35,18 @@ def generate_ip_addresses(data):
                 interface_ips[node2] = {}
             interface_ips[node1][intf1] = f"{ip1}/30"
             interface_ips[node2][intf2] = f"{ip2}/30"
+        else:
+            # If not, save IPs to interface_mac_vrf
+            if data['topology']['nodes'].get(node1, {}).get('config', {}).get('vars', {}).get('type', '') in ['leaf', 'spine', 'super-spine']:
+                if node1 not in interface_mac_vrf:
+                    interface_mac_vrf[node1] = {}
+                interface_mac_vrf[node1] = intf1
+            if data['topology']['nodes'].get(node2, {}).get('config', {}).get('vars', {}).get('type', '') in ['leaf', 'spine', 'super-spine']:
+                if node2 not in interface_mac_vrf:
+                    interface_mac_vrf[node2] = {}
+                interface_mac_vrf[node2] = intf2
+            #interface_mac_vrf[node1][intf1] = f"{ip1}/30"
+            #interface_mac_vrf[node2][intf2] = f"{ip2}/30"
 
         # Save loopback addresses
         if node1 not in loopback_ips:
@@ -66,4 +79,4 @@ def generate_ip_addresses(data):
                 neighbors_ibgp[node2] = {}
             neighbors_ibgp[node2][node1] = {"loopback_ip": loopback_ips[node1].split("/")[0]}
 
-    return interface_ips, loopback_ips, neighbors_bgp, neighbors_ibgp
+    return interface_ips, interface_mac_vrf, loopback_ips, neighbors_bgp, neighbors_ibgp
