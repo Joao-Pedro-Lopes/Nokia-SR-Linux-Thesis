@@ -12,9 +12,7 @@ encoding: json_ietf
 targets:
   leaf1:
   leaf2:
-  leaf3:
   spine1:
-  spine2:
 
 subscriptions:
   srl_if_oper_state:
@@ -45,6 +43,20 @@ subscriptions:
     stream-mode: sample
     sample-interval: 5s
 
+  srl_cpu:
+    paths:
+      - /platform/control[slot=*]/cpu[index=all]/total
+    mode: stream
+    stream-mode: sample
+    sample-interval: 5s
+
+  srl_mem:
+    paths:
+      - /platform/control[slot=*]/memory
+    mode: stream
+    stream-mode: sample
+    sample-interval: 5s
+
   srl_bgp_stats:
     paths:
       - /network-instance[name=*]/protocols/bgp/statistics
@@ -55,6 +67,20 @@ subscriptions:
   srl_ipv4_routes:
     paths:
       - /network-instance[name=*]/route-table/ipv4-unicast/statistics/
+    mode: stream
+    stream-mode: sample
+    sample-interval: 5s
+
+  srl_ipv6_routes:
+    paths:
+      - /network-instance[name=*]/route-table/ipv6-unicast/statistics/
+    mode: stream
+    stream-mode: sample
+    sample-interval: 5s
+
+  srl_apps:
+    paths:
+      - /system/app-management/application[name=*]
     mode: stream
     stream-mode: sample
     sample-interval: 5s

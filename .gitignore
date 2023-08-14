@@ -3,3 +3,11 @@
 
 # Ignore specific files
 **/config/aaamgr_local_user.json
+
+
+*.key
+*.log
+visualization_monitoring/configs/syslog/log/**
+visualization_monitoring/configs/syslog/syslog-ng.ctl
+visualization_monitoring/configs/syslog/syslog-ng.persist
+visualization_monitoring/configs/syslog/syslog-ng.pid

@@ -45,6 +45,46 @@ topology:
     srv2:
       kind: linux
 
+    ### TELEMETRY STACK ###
+    gnmic:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.41
+      image: ghcr.io/openconfig/gnmic:0.30.0
+      binds:
+        - ../../visualization_monitoring/gnmic-config.yml:/gnmic-config.yml:ro
+      cmd: --config /gnmic-config.yml --log subscribe
+      group: "10" # group 10 is assigned to the nodes of a telemetry stack
+
+    prometheus:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.42
+      image: prom/prometheus:v2.37.8
+      binds:
+        - ../../visualization_monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      cmd: --config.file=/etc/prometheus/prometheus.yml
+      ports:
+        - 9090:9090
+      group: "10"
+
+    grafana:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.43
+      image: grafana/grafana:9.5.2
+      binds:
+        - ../../visualization_monitoring/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+        - ../../visualization_monitoring/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+        - ../../visualization_monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      ports:
+        - 3000:3000
+      env:
+        GF_INSTALL_PLUGINS: https://algenty.github.io/flowcharting-repository/archives/agenty-flowcharting-panel-1.0.0d.220606199-SNAPSHOT.zip;agenty-flowcharting-panel
+        # env vars to enable anonymous access
+        GF_ORG_ROLE: "Admin"
+        GF_ORG_NAME: "Main Org"
+        GF_AUTH_ANONYMOUS_ENABLED: "true"
+        GF_AUTH_ANONYMOUS: "true"
+      group: "10"
+
   links:
     # inter-switch links
     - endpoints: ["leaf1:e1-49", "spine1:e1-1"]
