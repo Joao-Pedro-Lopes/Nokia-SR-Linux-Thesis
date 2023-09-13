@@ -1,0 +1,11 @@
+groups:
+- name: NokiaSRLinuxAlerts
+  rules:
+  - alert: InterfaceDown
+    expr: gnmic_srl_if_oper_state == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: "Interface has been down for more than 1 minute."
+      summary: "Interface down on {{$labels.instance}}"

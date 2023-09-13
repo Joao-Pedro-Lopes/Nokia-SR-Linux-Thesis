@@ -12,6 +12,7 @@ topology:
       LOOPBACK_IP_SUBNET: 10.0.0.0/24
       AS_NUMBER_EBGP_RANGE: 64512-65500
       AS_NUMBER_IBGP_VALUE: 100
+      #RR_IP: [192.xxx, yyy, ...] -- se calhar nem é necessário
   nodes:
     leaf1:
       kind: srl
@@ -37,6 +38,7 @@ topology:
       config:
         vars:
           type: spine
+          #is_rr: true/false
           #interface-name: ethernet-1/1
           #ip-address-p2p: 192.168.11.2/30
           #ip-address-loopback: 10.0.1.1/32
@@ -64,6 +66,17 @@ topology:
       cmd: --config.file=/etc/prometheus/prometheus.yml
       ports:
         - 9090:9090
+      group: "10"
+    
+    alertmanager:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.47  # Assign a unique IP if needed
+      image: prom/alertmanager:v0.26.0  # Check the latest version
+      binds:
+        - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      cmd: --config.file=/etc/alertmanager/alertmanager.yml
+      ports:
+        - 9093:9093  # Default Alertmanager port
       group: "10"
 
     grafana:

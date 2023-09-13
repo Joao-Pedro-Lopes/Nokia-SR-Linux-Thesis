@@ -1,9 +1,16 @@
-# Copyright 2020 Nokia
-# Licensed under the BSD 3-Clause License.
-# SPDX-License-Identifier: BSD-3-Clause
-
 global:
   scrape_interval: 5s
+
+# alert rule files specifies the alert conditions
+rule_files:
+  - "alert_rules.yml"  # Name of the file where you've defined your alerting rules
+
+# alertmanager configuration to send alerts
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - 'alertmanager:9093'
 
 # metrics_path defaults to '/metrics'
 # scheme defaults to 'http'.

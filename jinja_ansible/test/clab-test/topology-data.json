@@ -6,7 +6,7 @@
       "prefix": "clab",
       "mgmt": {
         "network": "clab",
-        "bridge": "br-62795ad02d81",
+        "bridge": "br-c573592c63a3",
         "ipv4-subnet": "172.20.20.0/24",
         "ipv4-gw": "172.20.20.1",
         "ipv6-subnet": "2001:172:20:20::/64",
@@ -17,8 +17,35 @@
     }
   },
   "nodes": {
-    "gnmic": {
+    "alertmanager": {
       "index": "0",
+      "shortname": "alertmanager",
+      "longname": "clab-test-alertmanager",
+      "fqdn": "alertmanager.test.io",
+      "group": "10",
+      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/alertmanager",
+      "kind": "linux",
+      "image": "prom/alertmanager:v0.26.0",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.5",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "2001:172:20:20::5",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
+        "clab-node-group": "10",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/alertmanager",
+        "clab-node-name": "alertmanager",
+        "clab-node-type": "",
+        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
+        "containerlab": "test"
+      }
+    },
+    "gnmic": {
+      "index": "1",
       "shortname": "gnmic",
       "longname": "clab-test-gnmic",
       "fqdn": "gnmic.test.io",
@@ -28,13 +55,13 @@
       "image": "ghcr.io/openconfig/gnmic:0.30.0",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.6",
+      "mgmt-ipv4-address": "172.20.20.10",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::6",
+      "mgmt-ipv6-address": "2001:172:20:20::a",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
         "clab-node-group": "10",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/gnmic",
@@ -45,7 +72,7 @@
       }
     },
     "grafana": {
-      "index": "1",
+      "index": "2",
       "shortname": "grafana",
       "longname": "clab-test-grafana",
       "fqdn": "grafana.test.io",
@@ -55,13 +82,13 @@
       "image": "grafana/grafana:9.5.2",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.9",
+      "mgmt-ipv4-address": "172.20.20.7",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::9",
+      "mgmt-ipv6-address": "2001:172:20:20::7",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
         "clab-node-group": "10",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/grafana",
@@ -72,147 +99,12 @@
       }
     },
     "leaf1": {
-      "index": "2",
+      "index": "3",
       "shortname": "leaf1",
       "longname": "clab-test-leaf1",
       "fqdn": "leaf1.test.io",
       "group": "",
       "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/leaf1",
-      "kind": "srl",
-      "image": "ghcr.io/nokia/srlinux:23.3.1",
-      "mgmt-net": "",
-      "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.12",
-      "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::c",
-      "mgmt-ipv6-prefix-length": 64,
-      "mac-address": "",
-      "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
-        "clab-node-group": "",
-        "clab-node-kind": "srl",
-        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/leaf1",
-        "clab-node-name": "leaf1",
-        "clab-node-type": "ixrd2",
-        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
-        "containerlab": "test"
-      }
-    },
-    "leaf2": {
-      "index": "3",
-      "shortname": "leaf2",
-      "longname": "clab-test-leaf2",
-      "fqdn": "leaf2.test.io",
-      "group": "",
-      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/leaf2",
-      "kind": "srl",
-      "image": "ghcr.io/nokia/srlinux:23.3.1",
-      "mgmt-net": "",
-      "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.10",
-      "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::a",
-      "mgmt-ipv6-prefix-length": 64,
-      "mac-address": "",
-      "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
-        "clab-node-group": "",
-        "clab-node-kind": "srl",
-        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/leaf2",
-        "clab-node-name": "leaf2",
-        "clab-node-type": "ixrd2",
-        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
-        "containerlab": "test"
-      }
-    },
-    "loki": {
-      "index": "4",
-      "shortname": "loki",
-      "longname": "clab-test-loki",
-      "fqdn": "loki.test.io",
-      "group": "",
-      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/loki",
-      "kind": "linux",
-      "image": "grafana/loki:2.7.4",
-      "mgmt-net": "",
-      "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.7",
-      "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::7",
-      "mgmt-ipv6-prefix-length": 64,
-      "mac-address": "",
-      "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
-        "clab-node-group": "",
-        "clab-node-kind": "linux",
-        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/loki",
-        "clab-node-name": "loki",
-        "clab-node-type": "",
-        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
-        "containerlab": "test"
-      }
-    },
-    "prometheus": {
-      "index": "5",
-      "shortname": "prometheus",
-      "longname": "clab-test-prometheus",
-      "fqdn": "prometheus.test.io",
-      "group": "10",
-      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/prometheus",
-      "kind": "linux",
-      "image": "prom/prometheus:v2.37.8",
-      "mgmt-net": "",
-      "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.5",
-      "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::5",
-      "mgmt-ipv6-prefix-length": 64,
-      "mac-address": "",
-      "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
-        "clab-node-group": "10",
-        "clab-node-kind": "linux",
-        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/prometheus",
-        "clab-node-name": "prometheus",
-        "clab-node-type": "",
-        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
-        "containerlab": "test"
-      }
-    },
-    "promtail": {
-      "index": "6",
-      "shortname": "promtail",
-      "longname": "clab-test-promtail",
-      "fqdn": "promtail.test.io",
-      "group": "",
-      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/promtail",
-      "kind": "linux",
-      "image": "grafana/promtail:2.7.4",
-      "mgmt-net": "",
-      "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.4",
-      "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::4",
-      "mgmt-ipv6-prefix-length": 64,
-      "mac-address": "",
-      "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
-        "clab-node-group": "",
-        "clab-node-kind": "linux",
-        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/promtail",
-        "clab-node-name": "promtail",
-        "clab-node-type": "",
-        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
-        "containerlab": "test"
-      }
-    },
-    "spine1": {
-      "index": "7",
-      "shortname": "spine1",
-      "longname": "clab-test-spine1",
-      "fqdn": "spine1.test.io",
-      "group": "",
-      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/spine1",
       "kind": "srl",
       "image": "ghcr.io/nokia/srlinux:23.3.1",
       "mgmt-net": "",
@@ -223,7 +115,142 @@
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
+        "clab-node-group": "",
+        "clab-node-kind": "srl",
+        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/leaf1",
+        "clab-node-name": "leaf1",
+        "clab-node-type": "ixrd2",
+        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
+        "containerlab": "test"
+      }
+    },
+    "leaf2": {
+      "index": "4",
+      "shortname": "leaf2",
+      "longname": "clab-test-leaf2",
+      "fqdn": "leaf2.test.io",
+      "group": "",
+      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/leaf2",
+      "kind": "srl",
+      "image": "ghcr.io/nokia/srlinux:23.3.1",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.12",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "2001:172:20:20::c",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
+        "clab-node-group": "",
+        "clab-node-kind": "srl",
+        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/leaf2",
+        "clab-node-name": "leaf2",
+        "clab-node-type": "ixrd2",
+        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
+        "containerlab": "test"
+      }
+    },
+    "loki": {
+      "index": "5",
+      "shortname": "loki",
+      "longname": "clab-test-loki",
+      "fqdn": "loki.test.io",
+      "group": "",
+      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/loki",
+      "kind": "linux",
+      "image": "grafana/loki:2.7.4",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.8",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "2001:172:20:20::8",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/loki",
+        "clab-node-name": "loki",
+        "clab-node-type": "",
+        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
+        "containerlab": "test"
+      }
+    },
+    "prometheus": {
+      "index": "6",
+      "shortname": "prometheus",
+      "longname": "clab-test-prometheus",
+      "fqdn": "prometheus.test.io",
+      "group": "10",
+      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/prometheus",
+      "kind": "linux",
+      "image": "prom/prometheus:v2.37.8",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.9",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "2001:172:20:20::9",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
+        "clab-node-group": "10",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/prometheus",
+        "clab-node-name": "prometheus",
+        "clab-node-type": "",
+        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
+        "containerlab": "test"
+      }
+    },
+    "promtail": {
+      "index": "7",
+      "shortname": "promtail",
+      "longname": "clab-test-promtail",
+      "fqdn": "promtail.test.io",
+      "group": "",
+      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/promtail",
+      "kind": "linux",
+      "image": "grafana/promtail:2.7.4",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.2",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "2001:172:20:20::2",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/promtail",
+        "clab-node-name": "promtail",
+        "clab-node-type": "",
+        "clab-topo-file": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/input.yml",
+        "containerlab": "test"
+      }
+    },
+    "spine1": {
+      "index": "8",
+      "shortname": "spine1",
+      "longname": "clab-test-spine1",
+      "fqdn": "spine1.test.io",
+      "group": "",
+      "labdir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/spine1",
+      "kind": "srl",
+      "image": "ghcr.io/nokia/srlinux:23.3.1",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.13",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "2001:172:20:20::d",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
         "clab-node-group": "",
         "clab-node-kind": "srl",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/spine1",
@@ -234,7 +261,7 @@
       }
     },
     "srv1": {
-      "index": "8",
+      "index": "9",
       "shortname": "srv1",
       "longname": "clab-test-srv1",
       "fqdn": "srv1.test.io",
@@ -244,13 +271,13 @@
       "image": "ghcr.io/hellt/network-multitool",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.8",
+      "mgmt-ipv4-address": "172.20.20.4",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::8",
+      "mgmt-ipv6-address": "2001:172:20:20::4",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
         "clab-node-group": "",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/srv1",
@@ -261,7 +288,7 @@
       }
     },
     "srv2": {
-      "index": "9",
+      "index": "10",
       "shortname": "srv2",
       "longname": "clab-test-srv2",
       "fqdn": "srv2.test.io",
@@ -271,13 +298,13 @@
       "image": "ghcr.io/hellt/network-multitool",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.2",
+      "mgmt-ipv4-address": "172.20.20.6",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::2",
+      "mgmt-ipv6-address": "2001:172:20:20::6",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
         "clab-node-group": "",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/srv2",
@@ -288,7 +315,7 @@
       }
     },
     "syslog": {
-      "index": "10",
+      "index": "11",
       "shortname": "syslog",
       "longname": "clab-test-syslog",
       "fqdn": "syslog.test.io",
@@ -304,7 +331,7 @@
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-62795ad02d81",
+        "clab-mgmt-net-bridge": "br-c573592c63a3",
         "clab-node-group": "",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/jinja_ansible/test/clab-test/syslog",
@@ -320,13 +347,13 @@
       "a": {
         "node": "leaf1",
         "interface": "e1-49",
-        "mac": "aa:c1:ab:36:bd:62",
+        "mac": "aa:c1:ab:13:00:b6",
         "peer": "z"
       },
       "z": {
         "node": "spine1",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:03:0d:d0",
+        "mac": "aa:c1:ab:a3:68:b1",
         "peer": "a"
       }
     },
@@ -334,13 +361,13 @@
       "a": {
         "node": "leaf2",
         "interface": "e1-49",
-        "mac": "aa:c1:ab:ae:4d:12",
+        "mac": "aa:c1:ab:e0:cd:a5",
         "peer": "z"
       },
       "z": {
         "node": "spine1",
         "interface": "e1-2",
-        "mac": "aa:c1:ab:60:12:94",
+        "mac": "aa:c1:ab:0f:cb:b2",
         "peer": "a"
       }
     },
@@ -348,13 +375,13 @@
       "a": {
         "node": "srv1",
         "interface": "eth1",
-        "mac": "aa:c1:ab:14:45:1e",
+        "mac": "aa:c1:ab:4b:af:da",
         "peer": "z"
       },
       "z": {
         "node": "leaf1",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:d3:15:95",
+        "mac": "aa:c1:ab:ee:e2:98",
         "peer": "a"
       }
     },
@@ -362,13 +389,13 @@
       "a": {
         "node": "srv2",
         "interface": "eth1",
-        "mac": "aa:c1:ab:21:7f:31",
+        "mac": "aa:c1:ab:4f:47:5a",
         "peer": "z"
       },
       "z": {
         "node": "leaf2",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:77:ba:c5",
+        "mac": "aa:c1:ab:95:17:20",
         "peer": "a"
       }
     }

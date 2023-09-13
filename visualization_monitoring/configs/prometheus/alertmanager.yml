@@ -1,0 +1,14 @@
+#global:
+  #smtp_smarthost: 'smtp.example.com:587'
+  #smtp_from: 'alertmanager@example.com'
+  #smtp_auth_username: 'username'
+  #smtp_auth_password: 'password'
+
+route:
+  group_by: ['alertname']
+  receiver: 'email-notification'
+
+receivers:
+- name: 'email-notification'
+  email_configs:
+  - to: 'joaopedrolopes00@gmail.com'

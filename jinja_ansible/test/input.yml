@@ -65,6 +65,17 @@ topology:
       ports:
         - 9090:9090
       group: "10"
+    
+    alertmanager:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.47  # assign a unique IP if needed
+      image: prom/alertmanager:v0.26.0  # latest version
+      binds:
+        - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/prometheus/alertmanager.yml:ro
+      cmd: --config.file=/etc/prometheus/alertmanager.yml
+      ports:
+        - 9093:9093  # default Alertmanager port
+      group: "10"
 
     grafana:
       kind: linux
