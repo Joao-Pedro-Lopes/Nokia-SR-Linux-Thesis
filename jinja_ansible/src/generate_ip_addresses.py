@@ -66,17 +66,35 @@ def generate_ip_addresses(data):
                 neighbors_bgp[node1] = {}
             neighbors_bgp[node1][node2] = {"ip": f"{ip2}"}
 
-            if node1 not in neighbors_ibgp:
-                neighbors_ibgp[node1] = {}
-            neighbors_ibgp[node1][node2] = {"loopback_ip": loopback_ips[node2].split("/")[0]}
+            #if node1 not in neighbors_ibgp:
+                #neighbors_ibgp[node1] = {}
+            #neighbors_ibgp[node1][node2] = {"loopback_ip": loopback_ips[node2].split("/")[0]}
 
         if node2_type in ['leaf', 'spine', 'super-spine']:
             if node2 not in neighbors_bgp:
                 neighbors_bgp[node2] = {}
             neighbors_bgp[node2][node1] = {"ip": f"{ip1}"}
 
+            #if node2 not in neighbors_ibgp:
+                #neighbors_ibgp[node2] = {}
+            #neighbors_ibgp[node2][node1] = {"loopback_ip": loopback_ips[node1].split("/")[0]}
+        
+        # Logic for iBGP neighbors
+        # data['topology']['nodes'][node1]['config']['vars'].get('is_route_reflector', False)
+        # this checks if the 'is_route_reflector' field exists for the node in question.
+        # if it exists, it will return the value (True or False).
+        # if the field does not exist, it defaults to False, meaning the node is not a route reflector.
+
+        if node1_type == 'leaf' or (node1_type in ['spine', 'super-spine'] and data['topology']['nodes'][node1]['config']['vars'].get('is_route_reflector', False)):
+            if node1 not in neighbors_ibgp:
+                neighbors_ibgp[node1] = {}
+            if node2_type == 'leaf' or (node2_type in ['spine', 'super-spine'] and data['topology']['nodes'][node2]['config']['vars'].get('is_route_reflector', False)):
+                neighbors_ibgp[node1][node2] = {"loopback_ip": loopback_ips[node2].split("/")[0]}
+
+        if node2_type == 'leaf' or (node2_type in ['spine', 'super-spine'] and data['topology']['nodes'][node2]['config']['vars'].get('is_route_reflector', False)):
             if node2 not in neighbors_ibgp:
                 neighbors_ibgp[node2] = {}
-            neighbors_ibgp[node2][node1] = {"loopback_ip": loopback_ips[node1].split("/")[0]}
+            if node1_type == 'leaf' or (node1_type in ['spine', 'super-spine'] and data['topology']['nodes'][node1]['config']['vars'].get('is_route_reflector', False)):
+                neighbors_ibgp[node2][node1] = {"loopback_ip": loopback_ips[node1].split("/")[0]}
 
     return interface_ips, interface_mac_vrf, loopback_ips, neighbors_bgp, neighbors_ibgp
