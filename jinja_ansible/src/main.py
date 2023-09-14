@@ -58,7 +58,7 @@ for node, config in nodes.items():
             variables = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
             # Render the template with the necessary inputs
             rendered_playbook = template.render(host_name=host_name, node=node, ibgp=variables['ibgp'], neighbors=variables['peers'])
-        if config_type == 'mac-vrf':
+        if config_type == 'mac-vrf' or config_type == 'mac-vrf-test':
             if node not in interface_mac_vrf:
                 continue
             variables = config_mac_vrf(node, interface_mac_vrf)

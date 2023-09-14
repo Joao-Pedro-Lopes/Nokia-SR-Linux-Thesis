@@ -38,7 +38,7 @@ topology:
       config:
         vars:
           type: spine
-          is_route_reflector: true # or false
+          is_route_reflector: true # or false -- if omission the code will assume the value is configured as false
           #interface-name: ethernet-1/1
           #ip-address-p2p: 192.168.11.2/30
           #ip-address-loopback: 10.0.1.1/32
