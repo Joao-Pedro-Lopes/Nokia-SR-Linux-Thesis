@@ -119,3 +119,61 @@
 
     - debug:
         var: set_response_ibgp
+    
+    {# ctl+k+c to comment/uncomment #}
+    {# - name: Set MAC-VRF access interface configuration - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name={{ interface_mac_vrf['interface-name'] }}]
+            value:
+              vlan-tagging: true
+          - path: /interface[name={{ interface_mac_vrf['interface-name'] }}]/subinterface[index=0]
+            value:
+              type: bridged
+              admin-state: enable
+          - path: /interface[name={{ interface_mac_vrf['interface-name'] }}]/subinterface[index=0]/vlan/encap/untagged
+
+      register: set_response_access_interface_mac_vrf
+
+    - debug:
+        var: set_response_access_interface_mac_vrf
+
+    - name: Set MAC-VRF Tunnel/VXLAN interface configuration - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /tunnel-interface[name={{ vxlan_name }}]/vxlan-interface[index={{ vxlan_interface }}]
+            value:
+              type: bridged
+          - path: /tunnel-interface[name={{ vxlan_name }}]/vxlan-interface[index={{ vxlan_interface }}]/ingress
+            value:
+              vni: {{ vni }}
+
+      register: set_response_tunnel_vxlan_interface_mac_vrf
+
+    - debug:
+        var: set_response_tunnel_vxlan_interface_mac_vrf
+    
+    - name: Set MAC-VRF network-instance - {{ node }}
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name={{ vrf_name }}]
+            value:
+              admin-state: enable
+              type: mac-vrf
+          - path: /network-instance[name={{ vrf_name }}]/interface[name={{ interface_mac_vrf['interface-name'] }}.0]
+          - path: /network-instance[name={{ vrf_name }}]/vxlan-interface[name={{ vxlan_name ~ '.' ~ vxlan_interface }}]
+
+          - path: /network-instance[name={{ vrf_name }}]/protocols/bgp-evpn/bgp-instance[id={{ vxlan_interface }}]
+            value:
+              admin-state: enable
+              vxlan-interface: {{ vxlan_name ~ '.' ~ vxlan_interface }}
+              evi: 111
+          - path: /network-instance[name={{ vrf_name }}]/protocols/bgp-vpn/bgp-instance[id={{ vxlan_interface }}]/route-target
+            value:
+              export-rt: target:100:111
+              import-rt: target:100:111
+
+      register: set_response_network_instance_mac_vrf
+
+    - debug:
+        var: set_response_network_instance_mac_vrf #}

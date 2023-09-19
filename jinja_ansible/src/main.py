@@ -38,6 +38,11 @@ as_number_max = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].
 # Generate and attribute AS numbers for eBGP
 as_numbers, neighbors_bgp = generate_as_numbers(data, range(as_number_min, as_number_max), neighbors_bgp)
 
+vxlan_name = data['topology']['defaults']['env']['VXLAN_NAME']
+vxlan_interface = data['topology']['defaults']['env']['VXLAN_INTERFACE']
+vni = int(data['topology']['defaults']['env']['VNI'])
+vrf_name = data['topology']['defaults']['env']['VRF_NAME']
+
 # Iterate over each node and generate a playbook
 for node, config in nodes.items():
     if 'config' in config and 'vars' in config['config']:
@@ -58,18 +63,22 @@ for node, config in nodes.items():
             variables = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
             # Render the template with the necessary inputs
             rendered_playbook = template.render(host_name=host_name, node=node, ibgp=variables['ibgp'], neighbors=variables['peers'])
-        if config_type == 'mac-vrf' or config_type == 'mac-vrf-test':
+        if config_type == 'mac-vrf':
             if node not in interface_mac_vrf:
                 continue
             variables = config_mac_vrf(node, interface_mac_vrf)
             # Render the template with the necessary inputs
-            rendered_playbook = template.render(host_name=host_name, interface=variables['interface'], node=node)
+            rendered_playbook = template.render(host_name=host_name, interface=variables['interface'], node=node, vxlan_name=vxlan_name, vxlan_interface=vxlan_interface, vni=vni, vrf_name=vrf_name)
         if config_type == 'general':
             variables_interfaces = config_interfaces(node, interface_ips)
             variables_ebgp = config_ebgp(node, as_numbers, loopback_ips, neighbors_bgp[node])
             variables_ibgp = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
+            if node not in interface_mac_vrf:
+                continue
+            variables_mac_vrf = config_mac_vrf(node, interface_mac_vrf)
             # Render the template with the necessary inputs
-            rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'])
+            #rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'])
+            rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], interface_mac_vrf=variables_mac_vrf['interface'], vxlan_name=vxlan_name, vxlan_interface=vxlan_interface, vni=vni, vrf_name=vrf_name)
         #FIXME: ibgp neighbor detection
         # Write the rendered playbook to a file
         playbook_filename = f"../playbooks/{config_type}_{node}_generated_playbook.yml"

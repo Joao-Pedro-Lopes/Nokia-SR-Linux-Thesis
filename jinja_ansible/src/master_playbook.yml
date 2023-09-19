@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  #become: yes
+  tasks:
+
+    - name: Execute Python code to generate playbooks
+      command: python3 main.py general
+
+    #- name: Start Containerlab
+      #shell: containerlab deploy -t ../inputs/input.yml
+
+    - name: Wait for Containerlab to be Ready
+      wait_for:
+        timeout: 10  # Number of seconds to wait for. Adjust as needed.
+    #old
+    #- name: Run playbook to configure SR Linux
+      #include_tasks: generated_playbook.yml  # Replace with your actual generated playbook
+    #new
+    - name: Find all generated playbooks
+      find:
+        paths: ../playbooks
+        patterns: "*.yml"
+      register: generated_playbooks
+
+    - name: Run each generated playbook
+      shell: ansible-playbook -i ../test/inventory.yml "{{ item.path }}"
+      register: playbook_output
+      with_items: "{{ generated_playbooks.files }}"
+
+    - debug: 
+        msg: "{{ playbook_output }}"
+
+
+# to run the playbook -- ansible-playbook master_playbook.yml
