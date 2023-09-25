@@ -12,6 +12,11 @@ topology:
       LOOPBACK_IP_SUBNET: 10.0.0.0/24
       AS_NUMBER_EBGP_RANGE: 64512-65500
       AS_NUMBER_IBGP_VALUE: 100
+      VXLAN_NAME: vxlan1
+      VXLAN_INTERFACE: 1
+      VNI: 1
+      VRF_NAME: vrf-1
+      #RR_IP: [192.xxx, yyy, ...] -- não é necessário
   nodes:
     leaf1:
       kind: srl
@@ -37,6 +42,7 @@ topology:
       config:
         vars:
           type: spine
+          is_route_reflector: true # or false -- if omission the code will assume the value is configured as false
           #interface-name: ethernet-1/1
           #ip-address-p2p: 192.168.11.2/30
           #ip-address-loopback: 10.0.1.1/32
@@ -60,10 +66,21 @@ topology:
       #mgmt-ipv4: 172.80.80.42
       image: prom/prometheus:v2.37.8
       binds:
-        - ../../visualization_monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        - ../../visualization_monitoring/configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       cmd: --config.file=/etc/prometheus/prometheus.yml
       ports:
         - 9090:9090
+      group: "10"
+    
+    alertmanager:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.47  # Assign a unique IP if needed
+      image: prom/alertmanager:v0.26.0  # Check the latest version
+      binds:
+        - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      cmd: --config.file=/etc/alertmanager/alertmanager.yml
+      ports:
+        - 9093:9093  # Default Alertmanager port
       group: "10"
 
     grafana:
@@ -71,9 +88,9 @@ topology:
       #mgmt-ipv4: 172.80.80.43
       image: grafana/grafana:9.5.2
       binds:
-        - ../../visualization_monitoring/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
-        - ../../visualization_monitoring/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
-        - ../../visualization_monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+        - ../../visualization_monitoring/configs/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+        - ../../visualization_monitoring/configs/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+        - ../../visualization_monitoring/configs/grafana/dashboards:/var/lib/grafana/dashboards
       ports:
         - 3000:3000
       env:
@@ -84,6 +101,38 @@ topology:
         GF_AUTH_ANONYMOUS_ENABLED: "true"
         GF_AUTH_ANONYMOUS: "true"
       group: "10"
+    
+    ### LOGGING STACK ###
+    syslog:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.44
+      image: linuxserver/syslog-ng:3.38.1-r0-ls75
+      binds:
+        - ../../visualization_monitoring/configs/syslog/:/config
+        - ../../visualization_monitoring/configs/syslog/log:/var/log
+      env:
+        PUID: 0
+        PGID: 0
+
+    promtail:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.45
+      image: grafana/promtail:2.7.4
+      binds:
+        - ../../visualization_monitoring/configs/promtail:/etc/promtail
+      cmd: --config.file=/etc/promtail/promtail-config.yml
+      ports:
+        - 9080:9080
+
+    loki:
+      kind: linux
+      #mgmt-ipv4: 172.80.80.46
+      image: grafana/loki:2.7.4
+      binds:
+        - ../../visualization_monitoring/configs/loki:/etc/loki
+      cmd: --config.file=/etc/loki/loki-config.yml
+      ports:
+        - 3100:3100
 
   links:
     # inter-switch links

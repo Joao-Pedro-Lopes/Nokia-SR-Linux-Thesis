@@ -1,34 +1,37 @@
 ---
 - hosts: localhost
-  #become: yes
   tasks:
 
     - name: Execute Python code to generate playbooks
       command: python3 main.py general
 
-    #- name: Start Containerlab
-      #shell: containerlab deploy -t ../inputs/input.yml
+    - name: Start Containerlab
+      shell: containerlab deploy -t ../inputs/input.yml
+      become: yes  # This will elevate privileges for this task
+      become_method: sudo  # This specifies to use sudo for elevation
 
     - name: Wait for Containerlab to be Ready
       wait_for:
-        timeout: 10  # Number of seconds to wait for. Adjust as needed.
-    #old
-    #- name: Run playbook to configure SR Linux
-      #include_tasks: generated_playbook.yml  # Replace with your actual generated playbook
-    #new
+        timeout: 60  # Number of seconds to wait for. Adjust as needed.
+    
     - name: Find all generated playbooks
       find:
         paths: ../playbooks
         patterns: "*.yml"
       register: generated_playbooks
 
+    - name: Filter out the inventory file
+      set_fact:
+        playbook_files: "{{ generated_playbooks.files | rejectattr('path', 'search', 'inventory.yml') | list }}"
+    
     - name: Run each generated playbook
-      shell: ansible-playbook -i ../test/inventory.yml "{{ item.path }}"
+      shell: ansible-playbook -i ../playbooks/inventory.yml "{{ item.path }}"
       register: playbook_output
-      with_items: "{{ generated_playbooks.files }}"
+      with_items: "{{ playbook_files }}"
 
     - debug: 
         msg: "{{ playbook_output }}"
 
 
-# to run the playbook -- ansible-playbook master_playbook.yml
+# to run the playbook -- ansible-playbook master_playbook.yml -K
+# - K flag is necessary because of sudo privileges need password
