@@ -78,11 +78,14 @@ for node, config in nodes.items():
             variables_ebgp = config_ebgp(node, as_numbers, loopback_ips, neighbors_bgp[node])
             variables_ibgp = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
             is_route_reflector = data['topology']['nodes'][node]['config']['vars'].get('is_route_reflector', False)
-            #if node not in interface_mac_vrf:
-                #continue
-            #variables_mac_vrf = config_mac_vrf(node, interface_mac_vrf)
+            if node not in interface_mac_vrf:
+                rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], route_reflector=is_route_reflector, needs_mac_vrf=False)
+            else:
+                variables_mac_vrf = config_mac_vrf(node, interface_mac_vrf)
+                rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], interface_mac_vrf=variables_mac_vrf['interface'], vxlan_name=vxlan_name, vxlan_interface=vxlan_interface, vni=vni, vrf_name=vrf_name, route_reflector=is_route_reflector, needs_mac_vrf=True)
+
             # Render the template with the necessary inputs
-            rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], route_reflector=is_route_reflector)
+            #rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], route_reflector=is_route_reflector)
             #rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], interface_mac_vrf=variables_mac_vrf['interface'], vxlan_name=vxlan_name, vxlan_interface=vxlan_interface, vni=vni, vrf_name=vrf_name)
 
         # Write the rendered playbook to a file
