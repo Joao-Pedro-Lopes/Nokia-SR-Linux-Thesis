@@ -33,6 +33,12 @@
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/local-as
             value:
               as-number: {{ ibgp['as-number'] }}
+          {% if route_reflector %}
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/route-reflector
+            value:
+              client: true
+              cluster-id: 2.2.2.2
+          {% endif %}
           {% for neighbor in neighbors %}
           - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address={{ neighbor['peer-address'] }}] 
             value:

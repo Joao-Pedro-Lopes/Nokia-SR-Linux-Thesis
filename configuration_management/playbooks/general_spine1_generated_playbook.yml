@@ -133,6 +133,12 @@
             value:
               as-number: 100
           
+          - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]/route-reflector
+            value:
+              client: true
+              cluster-id: 2.2.2.2
+          
+          
           - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.1] 
             value:
               admin-state: enable

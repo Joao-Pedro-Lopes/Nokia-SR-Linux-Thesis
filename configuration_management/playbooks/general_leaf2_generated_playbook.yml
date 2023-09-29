@@ -106,6 +106,7 @@
             value:
               as-number: 100
           
+          
           - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2] 
             value:
               admin-state: enable
