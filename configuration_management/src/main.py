@@ -29,11 +29,6 @@ inventory_content = ['[clab]']
 
 # Generate IP addresses
 interface_ips, interface_mac_vrf, loopback_ips, neighbors_bgp, neighbors_ibgp = generate_ip_addresses(data)
-print(interface_ips)
-print(interface_mac_vrf)
-print(loopback_ips)
-print(neighbors_bgp)
-print(neighbors_ibgp)
 
 # Generate and attribute AS numbers for eBGP
 as_number_min = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[0])

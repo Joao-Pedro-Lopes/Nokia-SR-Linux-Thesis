@@ -12,11 +12,11 @@ topology:
       LOOPBACK_IP_SUBNET: 10.0.0.0/24
       AS_NUMBER_EBGP_RANGE: 64512-65500
       AS_NUMBER_IBGP_VALUE: 100
+      CLUSTER_ID: 2.2.2.2
       VXLAN_NAME: vxlan1
       VXLAN_INTERFACE: 1
       VNI: 1
       VRF_NAME: vrf-1
-      CLUSTER_ID: 2.2.2.2
       #RR_IP: [192.xxx, yyy, ...] -- não é necessário
   nodes:
     leaf1:

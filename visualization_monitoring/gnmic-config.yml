@@ -29,20 +29,6 @@ subscriptions:
     stream-mode: sample
     sample-interval: 5s
 
-  srl_if_stats:
-    paths:
-      - /interface[name=ethernet-1/*]/statistics
-    mode: stream
-    stream-mode: sample
-    sample-interval: 5s
-
-  srl_if_traffic_rate:
-    paths:
-      - /interface[name=ethernet-1/*]/traffic-rate
-    mode: stream
-    stream-mode: sample
-    sample-interval: 5s
-
   srl_cpu:
     paths:
       - /platform/control[slot=*]/cpu[index=all]/total
@@ -71,20 +57,6 @@ subscriptions:
     stream-mode: sample
     sample-interval: 5s
 
-  srl_ipv6_routes:
-    paths:
-      - /network-instance[name=*]/route-table/ipv6-unicast/statistics/
-    mode: stream
-    stream-mode: sample
-    sample-interval: 5s
-
-  srl_apps:
-    paths:
-      - /system/app-management/application[name=*]
-    mode: stream
-    stream-mode: sample
-    sample-interval: 5s
-
 outputs:
   prom:
     type: prometheus
@@ -97,12 +69,6 @@ outputs:
     event-processors:
       - trim-prefixes
       - up-down-map
-  # stdout:
-  #   type: file
-  #   file-type: stdout
-  #   event-processors:
-  #     - proc-convert-strings-to-int
-  #     - trim-prefixes
 
 processors:
   trim-prefixes:
