@@ -17,8 +17,7 @@ def config_ebgp(node, as_numbers, loopback_ips, neighbors):
     }
 
     peers = []
-    for neighbors_dict in neighbors.values(): # Main node
-        #for neighbor_dict in neighbors_dict.values(): # Neighbor node -- now neighbors is for the specific node (don't need this)
+    for neighbors_dict in neighbors.values():
         peer = {
             'peer-as': neighbors_dict["as"],
             'peer-address': neighbors_dict["ip"],
@@ -33,8 +32,7 @@ def config_ibgp(node, as_numbers, loopback_ips, neighbors, ibgp_as_number):
     }
 
     peers = []
-    for neighbors_dict in neighbors.values(): # Main node
-        #for neighbor_dict in neighbors_dict.values(): # Neighbor node -- now neighbors is for the specific node (don't need this)
+    for neighbors_dict in neighbors.values():
         peer = {
             'peer-as': ibgp_as_number,
             'peer-address': neighbors_dict["loopback_ip"],
@@ -44,10 +42,19 @@ def config_ibgp(node, as_numbers, loopback_ips, neighbors, ibgp_as_number):
 
     return {'ibgp': ibgp, 'peers': peers}
 
-def config_mac_vrf(node, interface_mac_vrf):
+def config_mac_vrf(node, interface_mac_vrf, vrfs):
     # Create a dictionary for each interface
-    interface = {
-        'interface-name': f'ethernet-{interface_mac_vrf[node].replace("e", "")}',
-    }
+    interfaces = []
+    for intf, vrf_ids in interface_mac_vrf[node].items():
+        for vrf_id in vrf_ids:
+            interface = {
+                'interface-name': f'ethernet-{intf.replace("e", "")}',
+                'vlan_id': vrfs[vrf_id]['vlan_id'],
+                'vxlan_name': vrfs[vrf_id]['vxlan_name'],
+                'vxlan_interface': vrfs[vrf_id]['vlan_id'] + 1,
+                'vni': vrfs[vrf_id]['vlan_id'] + 1,
+                'vrf_name': vrfs[vrf_id]['vrf_name'],
+            }
+            interfaces.append(interface)
     
-    return {'interface': interface}
+    return {'interfaces': interfaces}

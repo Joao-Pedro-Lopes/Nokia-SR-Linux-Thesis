@@ -38,15 +38,24 @@ def generate_ip_addresses(data):
         else:
             # If not, save IPs to interface_mac_vrf
             if data['topology']['nodes'].get(node1, {}).get('config', {}).get('vars', {}).get('type', '') in ['leaf', 'spine', 'super-spine']:
-                if node1 not in interface_mac_vrf:
-                    interface_mac_vrf[node1] = {}
-                interface_mac_vrf[node1] = intf1
+                interface_label_data = data['topology']['nodes'].get(node1, {}).get('config', {}).get('vars', {}).get('interface_label', [])
+                for label in interface_label_data:
+                    if 'interface_list' in label and intf1 in label['interface_list']:
+                        if node1 not in interface_mac_vrf:
+                            interface_mac_vrf[node1] = {}
+                            if intf1 not in interface_mac_vrf:
+                                interface_mac_vrf[node1][intf1] = []
+                        interface_mac_vrf[node1][intf1].append(label['id'])
+
             if data['topology']['nodes'].get(node2, {}).get('config', {}).get('vars', {}).get('type', '') in ['leaf', 'spine', 'super-spine']:
-                if node2 not in interface_mac_vrf:
-                    interface_mac_vrf[node2] = {}
-                interface_mac_vrf[node2] = intf2
-            #interface_mac_vrf[node1][intf1] = f"{ip1}/30"
-            #interface_mac_vrf[node2][intf2] = f"{ip2}/30"
+                interface_label_data = data['topology']['nodes'].get(node2, {}).get('config', {}).get('vars', {}).get('interface_label', [])
+                for label in interface_label_data:
+                    if 'interface_list' in label and intf2 in label['interface_list']:
+                        if node2 not in interface_mac_vrf:
+                            interface_mac_vrf[node2] = {}
+                            if intf2 not in interface_mac_vrf:
+                                interface_mac_vrf[node2][intf2] = []
+                        interface_mac_vrf[node2][intf2].append(label['id'])
 
         # Save loopback addresses
         if node1 not in loopback_ips:
@@ -66,18 +75,10 @@ def generate_ip_addresses(data):
                 neighbors_bgp[node1] = {}
             neighbors_bgp[node1][node2] = {"ip": f"{ip2}"}
 
-            #if node1 not in neighbors_ibgp:
-                #neighbors_ibgp[node1] = {}
-            #neighbors_ibgp[node1][node2] = {"loopback_ip": loopback_ips[node2].split("/")[0]}
-
         if node2_type in ['leaf', 'spine', 'super-spine']:
             if node2 not in neighbors_bgp:
                 neighbors_bgp[node2] = {}
             neighbors_bgp[node2][node1] = {"ip": f"{ip1}"}
-
-            #if node2 not in neighbors_ibgp:
-                #neighbors_ibgp[node2] = {}
-            #neighbors_ibgp[node2][node1] = {"loopback_ip": loopback_ips[node1].split("/")[0]}
         
         # Logic for iBGP neighbors
         # data['topology']['nodes'][node1]['config']['vars'].get('is_route_reflector', False)

@@ -3,27 +3,27 @@ all:
     linux:
       hosts:
         clab-test-alertmanager:
-          ansible_host: 172.20.20.6
+          ansible_host: 172.20.20.10
         clab-test-gnmic:
           ansible_host: 172.20.20.4
         clab-test-grafana:
-          ansible_host: 172.20.20.11
+          ansible_host: 172.20.20.2
         clab-test-loki:
-          ansible_host: 172.20.20.8
+          ansible_host: 172.20.20.3
         clab-test-prometheus:
-          ansible_host: 172.20.20.9
+          ansible_host: 172.20.20.7
         clab-test-promtail:
           ansible_host: 172.20.20.5
         clab-test-srv1:
-          ansible_host: 172.20.20.7
+          ansible_host: 172.20.20.9
         clab-test-srv2:
-          ansible_host: 172.20.20.2
+          ansible_host: 172.20.20.6
         clab-test-syslog:
-          ansible_host: 172.20.20.3
+          ansible_host: 172.20.20.8
     srl:
       hosts:
         clab-test-leaf1:
-          ansible_host: 172.20.20.10
+          ansible_host: 172.20.20.11
         clab-test-leaf2:
           ansible_host: 172.20.20.13
         clab-test-spine1:

@@ -128,7 +128,8 @@
     
     {# ctl+k+c to comment/uncomment #}
     {% if needs_mac_vrf %}
-    - name: Set MAC-VRF access interface configuration - {{ node }}
+    {% for interface_mac_vrf in interfaces_mac_vrf %}
+    - name: Set MAC-VRF access interface configuration - {{ node }} - vlan_id - {{ interface_mac_vrf['vlan_id'] }}
       nokia.srlinux.config:
         update:
           - path: /interface[name={{ interface_mac_vrf['interface-name'] }}]
@@ -138,44 +139,48 @@
             value:
               type: bridged
               admin-state: enable
+          {% if interface_mac_vrf['vlan_id'] == 0 %}
           - path: /interface[name={{ interface_mac_vrf['interface-name'] }}]/subinterface[index=0]/vlan/encap/untagged
-
+          {% else %}
+          - path: /interface[name={{ interface_mac_vrf['interface-name'] }}]/subinterface[index=0]/vlan/encap/single-tagged
+            value:
+              vlan-id: {{ interface_mac_vrf['vlan_id'] }} 
+          {% endif %}
       register: set_response_access_interface_mac_vrf
 
     - debug:
         var: set_response_access_interface_mac_vrf
 
-    - name: Set MAC-VRF Tunnel/VXLAN interface configuration - {{ node }}
+    - name: Set MAC-VRF Tunnel/VXLAN interface configuration - {{ node }} - vlan_id - {{ interface_mac_vrf['vlan_id'] }}
       nokia.srlinux.config:
         update:
-          - path: /tunnel-interface[name={{ vxlan_name }}]/vxlan-interface[index={{ vxlan_interface }}]
+          - path: /tunnel-interface[name={{ interface_mac_vrf['vxlan_name'] }}]/vxlan-interface[index={{ interface_mac_vrf['vxlan_interface'] }}]
             value:
               type: bridged
-          - path: /tunnel-interface[name={{ vxlan_name }}]/vxlan-interface[index={{ vxlan_interface }}]/ingress
+          - path: /tunnel-interface[name={{ interface_mac_vrf['vxlan_name']  }}]/vxlan-interface[index={{ interface_mac_vrf['vxlan_interface'] }}]/ingress
             value:
-              vni: {{ vni }}
+              vni: {{ interface_mac_vrf['vni']  }}
 
       register: set_response_tunnel_vxlan_interface_mac_vrf
 
     - debug:
         var: set_response_tunnel_vxlan_interface_mac_vrf
     
-    - name: Set MAC-VRF network-instance - {{ node }}
+    - name: Set MAC-VRF network-instance - {{ node }} - vlan_id - {{ interface_mac_vrf['vlan_id'] }}
       nokia.srlinux.config:
         update:
-          - path: /network-instance[name={{ vrf_name }}]
+          - path: /network-instance[name={{ interface_mac_vrf['vrf_name'] }}]
             value:
               admin-state: enable
               type: mac-vrf
-          - path: /network-instance[name={{ vrf_name }}]/interface[name={{ interface_mac_vrf['interface-name'] }}.0]
-          - path: /network-instance[name={{ vrf_name }}]/vxlan-interface[name={{ vxlan_name ~ '.' ~ vxlan_interface }}]
-
-          - path: /network-instance[name={{ vrf_name }}]/protocols/bgp-evpn/bgp-instance[id={{ vxlan_interface }}]
+          - path: /network-instance[name={{ interface_mac_vrf['vrf_name'] }}]/interface[name={{ interface_mac_vrf['interface-name'] }}.0]
+          - path: /network-instance[name={{ interface_mac_vrf['vrf_name'] }}]/vxlan-interface[name={{ interface_mac_vrf['vxlan_name']  ~ '.' ~ interface_mac_vrf['vxlan_interface'] }}]
+          - path: /network-instance[name={{ interface_mac_vrf['vrf_name'] }}]/protocols/bgp-evpn/bgp-instance[id={{ interface_mac_vrf['vxlan_interface'] }}]
             value:
               admin-state: enable
-              vxlan-interface: {{ vxlan_name ~ '.' ~ vxlan_interface }}
+              vxlan-interface: {{ interface_mac_vrf['vxlan_name']  ~ '.' ~ interface_mac_vrf['vxlan_interface'] }}
               evi: 111
-          - path: /network-instance[name={{ vrf_name }}]/protocols/bgp-vpn/bgp-instance[id={{ vxlan_interface }}]/route-target
+          - path: /network-instance[name={{ interface_mac_vrf['vrf_name'] }}]/protocols/bgp-vpn/bgp-instance[id={{ interface_mac_vrf['vxlan_interface'] }}]/route-target
             value:
               export-rt: target:100:111
               import-rt: target:100:111
@@ -184,4 +189,5 @@
 
     - debug:
         var: set_response_network_instance_mac_vrf
+    {% endfor %} 
     {% endif %}

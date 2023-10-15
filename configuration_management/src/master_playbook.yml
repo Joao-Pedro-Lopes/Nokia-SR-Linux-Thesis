@@ -3,16 +3,12 @@
   tasks:
 
     - name: Execute Python code to generate playbooks
-      command: python3 main.py general
+      command: python3 main.py ../inputs/input.yml general
 
     - name: Start Containerlab
       shell: containerlab deploy --reconfigure -t ../inputs/input.yml
       become: yes  # This will elevate privileges for this task
       become_method: sudo  # This specifies to use sudo for elevation
-
-    #- name: Wait for Containerlab to be Ready -- Please wait, processing...
-      #wait_for:
-        #timeout: 60  # Number of seconds to wait for, adjust as needed
     
     - name: Find all generated playbooks
       find:

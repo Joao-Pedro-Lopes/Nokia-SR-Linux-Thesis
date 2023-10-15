@@ -13,11 +13,9 @@ topology:
       AS_NUMBER_EBGP_RANGE: 64512-65500
       AS_NUMBER_IBGP_VALUE: 100
       CLUSTER_ID: 2.2.2.2
-      VXLAN_NAME: vxlan1
-      VXLAN_INTERFACE: 1
-      VNI: 1
-      VRF_NAME: vrf-1
-      #RR_IP: [192.xxx, yyy, ...] -- não é necessário
+      VRF1: '{"id": 1, "VLAN_ID": 0, "VXLAN_NAME": "vxlan1", "VRF_NAME": "vrf-1"}'
+      VRF2: '{"id": 2, "VLAN_ID": 2, "VXLAN_NAME": "vxlan2", "VRF_NAME": "vrf-2"}'
+      VRF3: '{"id": 3, "VLAN_ID": 3, "VXLAN_NAME": "vxlan3", "VRF_NAME": "vrf-3"}'
   nodes:
     leaf1:
       kind: srl
@@ -25,28 +23,21 @@ topology:
       config:
         vars:
           type: leaf
-          #interface-name: ethernet-1/49
-          #ip-address-p2p: 192.168.11.1/30
-          #ip-address-loopback: 10.0.0.1/32
+          interface_label: [{id: 1, interface_list: [e1/1]}]
     leaf2:
       kind: srl
       type: ixrd2
       config:
         vars:
           type: leaf
-          #interface-name: ethernet-1/49
-          #ip-address-p2p: 192.168.12.1/30
-          #ip-address-loopback: 10.0.0.2/32
+          interface_label: [{id: 1, interface_list: [e1/1]}]
     spine1:
       kind: srl
       type: ixrd3
       config:
         vars:
           type: spine
-          is_route_reflector: true # or false -- if omission the code will assume the value is configured as false
-          #interface-name: ethernet-1/1
-          #ip-address-p2p: 192.168.11.2/30
-          #ip-address-loopback: 10.0.1.1/32
+          is_route_reflector: true
     srv1:
       kind: linux
     srv2:
@@ -55,7 +46,6 @@ topology:
     ### TELEMETRY STACK ###
     gnmic:
       kind: linux
-      #mgmt-ipv4: 172.80.80.41
       image: ghcr.io/openconfig/gnmic:0.30.0
       binds:
         - ../../visualization_monitoring/gnmic-config.yml:/gnmic-config.yml:ro
@@ -64,7 +54,6 @@ topology:
 
     prometheus:
       kind: linux
-      #mgmt-ipv4: 172.80.80.42
       image: prom/prometheus:v2.37.8
       binds:
         - ../../visualization_monitoring/configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -75,7 +64,6 @@ topology:
     
     alertmanager:
       kind: linux
-      #mgmt-ipv4: 172.80.80.47  # Assign a unique IP if needed
       image: prom/alertmanager:v0.26.0  # Check the latest version
       binds:
         - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
@@ -86,7 +74,6 @@ topology:
 
     grafana:
       kind: linux
-      #mgmt-ipv4: 172.80.80.43
       image: grafana/grafana:9.5.2
       binds:
         - ../../visualization_monitoring/configs/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
