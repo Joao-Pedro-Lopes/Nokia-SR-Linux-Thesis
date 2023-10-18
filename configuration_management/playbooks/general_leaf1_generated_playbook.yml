@@ -166,7 +166,6 @@
               type: mac-vrf
           - path: /network-instance[name=vrf-1]/interface[name=ethernet-1/1.0]
           - path: /network-instance[name=vrf-1]/vxlan-interface[name=vxlan1.1]
-
           - path: /network-instance[name=vrf-1]/protocols/bgp-evpn/bgp-instance[id=1]
             value:
               admin-state: enable

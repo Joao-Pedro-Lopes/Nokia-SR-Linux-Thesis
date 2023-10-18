@@ -50,7 +50,7 @@ topology:
       binds:
         - ../../visualization_monitoring/gnmic-config.yml:/gnmic-config.yml:ro
       cmd: --config /gnmic-config.yml --log subscribe
-      group: "10" # group 10 is assigned to the nodes of a telemetry stack
+      group: "10"
 
     prometheus:
       kind: linux
@@ -64,17 +64,17 @@ topology:
     
     alertmanager:
       kind: linux
-      image: prom/alertmanager:v0.26.0  # Check the latest version
+      image: prom/alertmanager:latest
       binds:
         - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
       cmd: --config.file=/etc/alertmanager/alertmanager.yml
       ports:
-        - 9093:9093  # Default Alertmanager port
+        - 9093:9093
       group: "10"
 
     grafana:
       kind: linux
-      image: grafana/grafana:9.5.2
+      image: grafana/grafana:10.1.5
       binds:
         - ../../visualization_monitoring/configs/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
         - ../../visualization_monitoring/configs/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
@@ -82,45 +82,11 @@ topology:
       ports:
         - 3000:3000
       env:
-        GF_INSTALL_PLUGINS: https://algenty.github.io/flowcharting-repository/archives/agenty-flowcharting-panel-1.0.0d.220606199-SNAPSHOT.zip;agenty-flowcharting-panel
-        # env vars to enable anonymous access
         GF_ORG_ROLE: "Admin"
         GF_ORG_NAME: "Main Org"
         GF_AUTH_ANONYMOUS_ENABLED: "true"
         GF_AUTH_ANONYMOUS: "true"
       group: "10"
-    
-    ### LOGGING STACK ###
-    syslog:
-      kind: linux
-      #mgmt-ipv4: 172.80.80.44
-      image: linuxserver/syslog-ng:3.38.1-r0-ls75
-      binds:
-        - ../../visualization_monitoring/configs/syslog/:/config
-        - ../../visualization_monitoring/configs/syslog/log:/var/log
-      env:
-        PUID: 0
-        PGID: 0
-
-    promtail:
-      kind: linux
-      #mgmt-ipv4: 172.80.80.45
-      image: grafana/promtail:2.7.4
-      binds:
-        - ../../visualization_monitoring/configs/promtail:/etc/promtail
-      cmd: --config.file=/etc/promtail/promtail-config.yml
-      ports:
-        - 9080:9080
-
-    loki:
-      kind: linux
-      #mgmt-ipv4: 172.80.80.46
-      image: grafana/loki:2.7.4
-      binds:
-        - ../../visualization_monitoring/configs/loki:/etc/loki
-      cmd: --config.file=/etc/loki/loki-config.yml
-      ports:
-        - 3100:3100
 
   links:
     # inter-switch links
