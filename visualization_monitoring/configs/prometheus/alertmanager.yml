@@ -21,7 +21,10 @@ route:
   group_wait: 1s
   group_interval: 5m
   repeat_interval: 1h
-  receiver: 'dummy-receiver'
+  #receiver: 'dummy-receiver'
 
-receivers:
-- name: 'dummy-receiver'
+#receivers:
+#- name: 'dummy-receiver'
+
+#receiver not needed once we don't send notifications
+#this way it will be only send to alertmanager to later be shown in Grafana
