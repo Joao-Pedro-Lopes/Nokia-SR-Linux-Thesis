@@ -1,4 +1,6 @@
 [clab]
-clab-test-leaf1 ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux
-clab-test-leaf2 ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux
-clab-test-spine1 ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux
+clab-2pods-leaf1 ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux
+clab-2pods-leaf3 ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux
+clab-2pods-spine1 ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux
+clab-2pods-spine2 ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux
+clab-2pods-superspine ansible_connection=ansible.netcommon.httpapi ansible_user=admin ansible_password=NokiaSrl1! ansible_network_os=nokia.srlinux.srlinux

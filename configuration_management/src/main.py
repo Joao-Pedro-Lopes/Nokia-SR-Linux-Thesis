@@ -17,6 +17,9 @@ config_type = sys.argv[-1]
 with open(f'../templates/{config_type}.j2', 'r') as template_file:
     template = Template(template_file.read())
 
+with open(f'../templates/gnmic-config.j2', 'r') as template_file:
+    gnmic_config_template = Template(template_file.read())
+
 # Read the data from the input YAML file
 with open(input_file, 'r') as yaml_file:
     data = yaml.safe_load(yaml_file)
@@ -52,9 +55,12 @@ for key, value in data["topology"]["defaults"]["env"].items():
         vrfs[vrf_info['id']]['vxlan_name'] = vrf_info['VXLAN_NAME']
         vrfs[vrf_info['id']]['vrf_name'] = vrf_info['VRF_NAME']
 
+targets_gnmic_config = []
+
 # Iterate over each node and generate a playbook
 for node, config in nodes.items():
     if 'config' in config and 'vars' in config['config']:
+        targets_gnmic_config.append(node)
         # Prepare the necessary inputs for the Jinja template
 
         # Construct the host_name variable
@@ -83,15 +89,20 @@ for node, config in nodes.items():
         if config_type == 'general':
             variables_interfaces = config_interfaces(node, interface_ips)
             variables_ebgp = config_ebgp(node, as_numbers, loopback_ips, neighbors_bgp[node])
-            variables_ibgp = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
-            is_route_reflector = data['topology']['nodes'][node]['config']['vars'].get('is_route_reflector', False)
+
+            needs_ibgp = False
+            if node in neighbors_ibgp:
+                variables_ibgp = config_ibgp(node, as_numbers, loopback_ips, neighbors_ibgp[node], data['topology']['defaults']['env']['AS_NUMBER_IBGP_VALUE'])
+                needs_ibgp = True
             
+            is_route_reflector = data['topology']['nodes'][node]['config']['vars'].get('is_route_reflector', False)
+
             # Render the template with the necessary inputs
             if node not in interface_mac_vrf:
-                rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], route_reflector=is_route_reflector, needs_mac_vrf=False)
+                rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], needs_ibgp=needs_ibgp, ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], route_reflector=is_route_reflector, needs_mac_vrf=False)
             else:
                 variables_mac_vrf = config_mac_vrf(node, interface_mac_vrf, vrfs)
-                rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], route_reflector=is_route_reflector, needs_mac_vrf=True, interfaces_mac_vrf=variables_mac_vrf['interfaces'])
+                rendered_playbook = template.render(host_name=host_name, node=node, interfaces=variables_interfaces['interfaces'], ip_address_loopback=loopback_ips[node], ebgp=variables_ebgp['ebgp'], needs_ibgp=needs_ibgp, ibgp=variables_ibgp['ibgp'], neighbors_ebgp=variables_ebgp['peers'], neighbors_ibgp=variables_ibgp['peers'], route_reflector=is_route_reflector, needs_mac_vrf=True, interfaces_mac_vrf=variables_mac_vrf['interfaces'])
 
         # Write the rendered playbook to a file
         playbook_filename = f'{playbooks_directory}/{config_type}_{node}_generated_playbook.yml'
@@ -109,3 +120,7 @@ with open(inventory_filepath, 'w') as inventory_file:
 
 print(f'Generated inventory file: {inventory_filepath}')
 
+print(targets_gnmic_config)
+# Write targets to gnmic config file
+with open("../../visualization_monitoring/gnmic-config.yml", "w") as f:
+    f.write(gnmic_config_template.render(targets_gnmic_config=targets_gnmic_config))

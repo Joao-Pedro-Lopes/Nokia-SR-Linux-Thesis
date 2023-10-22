@@ -87,7 +87,7 @@
 
     - debug:
         var: set_response_ebgp
-
+    {% if needs_ibgp %}
     - name: Set protocol iBGP - {{ node }}
       nokia.srlinux.config:
         update:
@@ -125,6 +125,7 @@
 
     - debug:
         var: set_response_ibgp
+    {% endif %}
     
     {# ctl+k+c to comment/uncomment #}
     {% if needs_mac_vrf %}

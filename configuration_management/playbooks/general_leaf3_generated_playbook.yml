@@ -1,11 +1,11 @@
 # Jinja template
 ---
 - name: Full configuration -- interfaces, eBGP and iBGP
-  hosts: clab-test-leaf2
+  hosts: clab-2pods-leaf3
   gather_facts: false
   tasks:
     
-    - name: Set p2p interface configuration - leaf2
+    - name: Set p2p interface configuration - leaf3
       nokia.srlinux.config:
         update:
           - path: /interface[name=ethernet-1/49]
@@ -19,7 +19,7 @@
           - path: /interface[name=ethernet-1/49]/subinterface[index=0]/ipv4
             value:
               admin-state: enable
-          - path: /interface[name=ethernet-1/49]/subinterface[index=0]/ipv4/address[ip-prefix=192.168.11.5/30]
+          - path: /interface[name=ethernet-1/49]/subinterface[index=0]/ipv4/address[ip-prefix=192.168.11.13/30]
           - path: /network-instance[name=default]/interface[name=ethernet-1/49.0]
 
       register: set_response_p2p_1
@@ -27,7 +27,7 @@
     - debug:
         var: set_response_p2p_1
     
-    - name: Set loopback interface configuration - leaf2
+    - name: Set loopback interface configuration - leaf3
       nokia.srlinux.config:
         update:
           - path: /interface[name=system0]
@@ -41,7 +41,7 @@
           - path: /interface[name=system0]/subinterface[index=0]/ipv4
             value:
               admin-state: enable
-          - path: /interface[name=system0]/subinterface[index=0]/ipv4/address[ip-prefix=10.0.0.3/32]
+          - path: /interface[name=system0]/subinterface[index=0]/ipv4/address[ip-prefix=10.0.0.5/32]
           - path: /network-instance[name=default]/interface[name=system0.0]
 
       register: set_response_loopback
@@ -49,7 +49,7 @@
     - debug:
         var: set_response_loopback
     
-    - name: Set routing policy - leaf2
+    - name: Set routing policy - leaf3
       nokia.srlinux.config:
         update:
           - path: /routing-policy/policy[name=all]/default-action
@@ -61,14 +61,14 @@
     - debug:
         var: set_response_routing_policy_ebgp
     
-    - name: Set protocol eBGP - leaf2
+    - name: Set protocol eBGP - leaf3
       nokia.srlinux.config:
         update:
           - path: /network-instance[name=default]/protocols/bgp
             value:
               admin-state: enable
               autonomous-system: 64513
-              router-id: 10.0.0.3
+              router-id: 10.0.0.5
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]  
             value:
               admin-state: enable
@@ -77,18 +77,18 @@
           - path: /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=ipv4-unicast]
             value:
               admin-state: enable
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=192.168.11.6] 
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=192.168.11.14] 
             value:
               admin-state: enable
-              peer-as: 64514
+              peer-as: 64515
               peer-group: eBGP-underlay
           
       register: set_response_ebgp
 
     - debug:
         var: set_response_ebgp
-
-    - name: Set protocol iBGP - leaf2
+    
+    - name: Set protocol iBGP - leaf3
       nokia.srlinux.config:
         update:
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=iBGP-overlay]
@@ -107,15 +107,6 @@
               as-number: 100
           
           
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2] 
-            value:
-              admin-state: enable
-              peer-as: 100
-              peer-group: iBGP-overlay
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2]/transport
-            value:
-              local-address: 10.0.0.3
-          
       register: set_response_ibgp
 
     - debug:
@@ -124,7 +115,8 @@
     
     
     
-    - name: Set MAC-VRF access interface configuration - leaf2 - vlan_id - 0
+    
+    - name: Set MAC-VRF access interface configuration - leaf3 - vlan_id - 0
       nokia.srlinux.config:
         update:
           - path: /interface[name=ethernet-1/1]
@@ -142,13 +134,13 @@
     - debug:
         var: set_response_access_interface_mac_vrf
 
-    - name: Set MAC-VRF Tunnel/VXLAN interface configuration - leaf2 - vlan_id - 0
+    - name: Set MAC-VRF Tunnel/VXLAN interface configuration - leaf3 - vlan_id - 0
       nokia.srlinux.config:
         update:
-          - path: /tunnel-interface[name=vxlan1]/vxlan-interface[index=1]
+          - path: /tunnel-interface[name=vxlan2]/vxlan-interface[index=1]
             value:
               type: bridged
-          - path: /tunnel-interface[name=vxlan1]/vxlan-interface[index=1]/ingress
+          - path: /tunnel-interface[name=vxlan2]/vxlan-interface[index=1]/ingress
             value:
               vni: 1
 
@@ -157,21 +149,21 @@
     - debug:
         var: set_response_tunnel_vxlan_interface_mac_vrf
     
-    - name: Set MAC-VRF network-instance - leaf2 - vlan_id - 0
+    - name: Set MAC-VRF network-instance - leaf3 - vlan_id - 0
       nokia.srlinux.config:
         update:
-          - path: /network-instance[name=vrf-1]
+          - path: /network-instance[name=vrf-2]
             value:
               admin-state: enable
               type: mac-vrf
-          - path: /network-instance[name=vrf-1]/interface[name=ethernet-1/1.0]
-          - path: /network-instance[name=vrf-1]/vxlan-interface[name=vxlan1.1]
-          - path: /network-instance[name=vrf-1]/protocols/bgp-evpn/bgp-instance[id=1]
+          - path: /network-instance[name=vrf-2]/interface[name=ethernet-1/1.0]
+          - path: /network-instance[name=vrf-2]/vxlan-interface[name=vxlan2.1]
+          - path: /network-instance[name=vrf-2]/protocols/bgp-evpn/bgp-instance[id=1]
             value:
               admin-state: enable
-              vxlan-interface: vxlan1.1
+              vxlan-interface: vxlan2.1
               evi: 111
-          - path: /network-instance[name=vrf-1]/protocols/bgp-vpn/bgp-instance[id=1]/route-target
+          - path: /network-instance[name=vrf-2]/protocols/bgp-vpn/bgp-instance[id=1]/route-target
             value:
               export-rt: target:100:111
               import-rt: target:100:111

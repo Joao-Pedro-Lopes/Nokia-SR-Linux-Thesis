@@ -1,0 +1,135 @@
+name: 2pods
+
+topology:
+  kinds:
+    srl:
+      image: ghcr.io/nokia/srlinux:23.3.1
+    linux:
+      image: ghcr.io/hellt/network-multitool
+  defaults:
+    env:
+      P2P_IP_SUBNET: 192.168.11.0/24
+      LOOPBACK_IP_SUBNET: 10.0.0.0/24
+      AS_NUMBER_EBGP_RANGE: 64512-65500
+      AS_NUMBER_IBGP_VALUE: 100
+      VRF1: '{"id": 1, "VLAN_ID": 0, "VXLAN_NAME": "vxlan1", "VRF_NAME": "vrf-1"}'
+      VRF2: '{"id": 2, "VLAN_ID": 0, "VXLAN_NAME": "vxlan2", "VRF_NAME": "vrf-2"}'
+  nodes:
+    leaf1:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          type: leaf
+          interface_label: [{id: 1, interface_list: [e1/1]}]
+    # leaf2:
+    #   kind: srl
+    #   type: ixrd2
+    #   config:
+    #     vars:
+    #       type: leaf
+    #       interface_label: [{id: 1, interface_list: [e1/1]}]
+    leaf3:
+      kind: srl
+      type: ixrd2
+      config:
+        vars:
+          type: leaf
+          interface_label: [{id: 2, interface_list: [e1/1]}]
+    # leaf4:
+    #   kind: srl
+    #   type: ixrd2
+    #   config:
+    #     vars:
+    #       type: leaf
+    #       interface_label: [{id: 2, interface_list: [e1/1]}]
+    spine1:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          type: spine
+          is_route_reflector: true
+    spine2:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          type: spine
+    superspine:
+      kind: srl
+      type: ixrd3
+      config:
+        vars:
+          type: super-spine
+    srv1:
+      kind: linux
+    # srv2:
+    #   kind: linux
+    srv3:
+      kind: linux
+    # srv4:
+    #   kind: linux
+
+    ### TELEMETRY STACK ###
+    gnmic:
+      kind: linux
+      image: ghcr.io/openconfig/gnmic:0.30.0
+      binds:
+        - ../../visualization_monitoring/gnmic-config.yml:/gnmic-config.yml:ro
+      cmd: --config /gnmic-config.yml --log subscribe
+      group: "10"
+
+    prometheus:
+      kind: linux
+      image: prom/prometheus:v2.37.8
+      binds:
+        - ../../visualization_monitoring/configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      cmd: --config.file=/etc/prometheus/prometheus.yml
+      ports:
+        - 9090:9090
+      group: "10"
+    
+    alertmanager:
+      kind: linux
+      image: prom/alertmanager:latest
+      binds:
+        - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      cmd: --config.file=/etc/alertmanager/alertmanager.yml
+      ports:
+        - 9093:9093
+      group: "10"
+
+    grafana:
+      kind: linux
+      image: grafana/grafana:10.1.5
+      binds:
+        - ../../visualization_monitoring/configs/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+        - ../../visualization_monitoring/configs/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+        - ../../visualization_monitoring/configs/grafana/dashboards:/var/lib/grafana/dashboards
+      ports:
+        - 3000:3000
+      env:
+        GF_ORG_ROLE: "Admin"
+        GF_ORG_NAME: "Main Org"
+        GF_AUTH_ANONYMOUS_ENABLED: "true"
+        GF_AUTH_ANONYMOUS: "true"
+      group: "10"
+    
+  links:
+    - endpoints: ["spine1:e1-3", "superspine:e1-1"]
+    - endpoints: ["spine2:e1-3", "superspine:e1-2"]
+
+    # inter-switch links
+    - endpoints: ["leaf1:e1-49", "spine1:e1-1"]
+    # - endpoints: ["leaf2:e1-49", "spine1:e1-2"]
+    
+    - endpoints: ["leaf3:e1-49", "spine2:e1-1"]
+    # - endpoints: ["leaf4:e1-49", "spine2:e1-2"]
+    
+    # server links
+    - endpoints: ["srv1:eth1", "leaf1:e1-1"]
+    # - endpoints: ["srv2:eth1", "leaf2:e1-1"]
+
+    - endpoints: ["srv3:eth1", "leaf3:e1-1"]
+    # - endpoints: ["srv4:eth1", "leaf4:e1-1"]

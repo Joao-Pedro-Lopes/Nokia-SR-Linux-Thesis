@@ -1,7 +1,7 @@
 # Jinja template
 ---
 - name: Full configuration -- interfaces, eBGP and iBGP
-  hosts: clab-test-leaf1
+  hosts: clab-2pods-leaf1
   gather_facts: false
   tasks:
     
@@ -19,7 +19,7 @@
           - path: /interface[name=ethernet-1/49]/subinterface[index=0]/ipv4
             value:
               admin-state: enable
-          - path: /interface[name=ethernet-1/49]/subinterface[index=0]/ipv4/address[ip-prefix=192.168.11.1/30]
+          - path: /interface[name=ethernet-1/49]/subinterface[index=0]/ipv4/address[ip-prefix=192.168.11.9/30]
           - path: /network-instance[name=default]/interface[name=ethernet-1/49.0]
 
       register: set_response_p2p_1
@@ -41,7 +41,7 @@
           - path: /interface[name=system0]/subinterface[index=0]/ipv4
             value:
               admin-state: enable
-          - path: /interface[name=system0]/subinterface[index=0]/ipv4/address[ip-prefix=10.0.0.1/32]
+          - path: /interface[name=system0]/subinterface[index=0]/ipv4/address[ip-prefix=10.0.0.4/32]
           - path: /network-instance[name=default]/interface[name=system0.0]
 
       register: set_response_loopback
@@ -68,7 +68,7 @@
             value:
               admin-state: enable
               autonomous-system: 64512
-              router-id: 10.0.0.1
+              router-id: 10.0.0.4
           - path: /network-instance[name=default]/protocols/bgp/group[group-name=eBGP-underlay]  
             value:
               admin-state: enable
@@ -77,7 +77,7 @@
           - path: /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=ipv4-unicast]
             value:
               admin-state: enable
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=192.168.11.2] 
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=192.168.11.10] 
             value:
               admin-state: enable
               peer-as: 64514
@@ -87,7 +87,7 @@
 
     - debug:
         var: set_response_ebgp
-
+    
     - name: Set protocol iBGP - leaf1
       nokia.srlinux.config:
         update:
@@ -107,19 +107,20 @@
               as-number: 100
           
           
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2] 
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.1] 
             value:
               admin-state: enable
               peer-as: 100
               peer-group: iBGP-overlay
-          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.2]/transport
+          - path: /network-instance[name=default]/protocols/bgp/neighbor[peer-address=10.0.0.1]/transport
             value:
-              local-address: 10.0.0.1
+              local-address: 10.0.0.4
           
       register: set_response_ibgp
 
     - debug:
         var: set_response_ibgp
+    
     
     
     

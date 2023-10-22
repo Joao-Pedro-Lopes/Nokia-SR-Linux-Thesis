@@ -1,4 +1,4 @@
-name: test
+name: 1pod
 
 topology:
   kinds:
@@ -13,10 +13,7 @@ topology:
       AS_NUMBER_EBGP_RANGE: 64512-65500
       AS_NUMBER_IBGP_VALUE: 100
       CLUSTER_ID: 2.2.2.2
-      VXLAN_NAME: vxlan1
-      VXLAN_INTERFACE: 1
-      VNI: 1
-      VRF_NAME: vrf-1
+      VRF1: '{"id": 1, "VLAN_ID": 0, "VXLAN_NAME": "vxlan1", "VRF_NAME": "vrf-1"}'
   nodes:
     leaf1:
       kind: srl
@@ -24,12 +21,14 @@ topology:
       config:
         vars:
           type: leaf
+          interface_label: [{id: 1, interface_list: [e1/1]}]
     leaf2:
       kind: srl
       type: ixrd2
       config:
         vars:
           type: leaf
+          interface_label: [{id: 1, interface_list: [e1/1]}]
     spine1:
       kind: srl
       type: ixrd3
@@ -37,7 +36,6 @@ topology:
         vars:
           type: spine
           is_route_reflector: true
-      kind: linux
     srv1:
       kind: linux
     srv2:
@@ -50,7 +48,7 @@ topology:
       binds:
         - ../../visualization_monitoring/gnmic-config.yml:/gnmic-config.yml:ro
       cmd: --config /gnmic-config.yml --log subscribe
-      group: "10" # group 10 is assigned to the nodes of a telemetry stack
+      group: "10"
 
     prometheus:
       kind: linux
@@ -64,16 +62,17 @@ topology:
     
     alertmanager:
       kind: linux
-      image: prom/alertmanager:v0.26.0  # Check the latest version
+      image: prom/alertmanager:latest
       binds:
         - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
       cmd: --config.file=/etc/alertmanager/alertmanager.yml
       ports:
-        - 9093:9093  # Default Alertmanager port
+        - 9093:9093
       group: "10"
 
     grafana:
-      image: grafana/grafana:9.5.2
+      kind: linux
+      image: grafana/grafana:10.1.5
       binds:
         - ../../visualization_monitoring/configs/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
         - ../../visualization_monitoring/configs/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
@@ -81,13 +80,12 @@ topology:
       ports:
         - 3000:3000
       env:
-        # env vars to enable anonymous access
         GF_ORG_ROLE: "Admin"
         GF_ORG_NAME: "Main Org"
         GF_AUTH_ANONYMOUS_ENABLED: "true"
         GF_AUTH_ANONYMOUS: "true"
       group: "10"
-    
+
   links:
     # inter-switch links
     - endpoints: ["leaf1:e1-49", "spine1:e1-1"]
