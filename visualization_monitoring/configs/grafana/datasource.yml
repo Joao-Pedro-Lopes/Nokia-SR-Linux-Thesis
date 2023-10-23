@@ -6,7 +6,7 @@ datasources:
     type: prometheus
     url: http://prometheus:9090
   - name: Prometheus Alertmanager
-    type: alertmanager
+    type: prometheus
     url: http://alertmanager:9093
   # - name: Loki
   #   type: loki

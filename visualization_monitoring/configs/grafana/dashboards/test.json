@@ -58,6 +58,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -124,7 +125,7 @@
           "refId": "A"
         }
       ],
-      "title": "Panel Title",
+      "title": "CPU Utilization",
       "type": "timeseries"
     },
     {
@@ -151,6 +152,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -253,7 +255,7 @@
           "refId": "D"
         }
       ],
-      "title": "Panel Title",
+      "title": "Memory Utilization",
       "type": "timeseries"
     },
     {
@@ -269,6 +271,12 @@
           },
           "custom": {
             "fillOpacity": 70,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineWidth": 0,
             "spanNulls": false
           },
@@ -407,7 +415,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.5",
       "targets": [
         {
           "datasource": {
@@ -421,7 +429,7 @@
           "refId": "A"
         }
       ],
-      "title": "Panel Title",
+      "title": "Interfaces State",
       "type": "stat"
     },
     {
@@ -434,7 +442,7 @@
       },
       "id": 4,
       "panels": [],
-      "title": "Underlay",
+      "title": "Overlay and Underlay",
       "type": "row"
     },
     {
@@ -483,7 +491,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.5",
       "targets": [
         {
           "datasource": {
@@ -558,7 +566,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.5",
       "targets": [
         {
           "datasource": {
@@ -633,7 +641,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.5",
       "targets": [
         {
           "datasource": {
@@ -683,7 +691,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "leaf1",
           "value": "leaf1"
         },

@@ -3,14 +3,13 @@ global:
 
 # alert rule files specifies the alert conditions
 rule_files:
-  - "alert_rules.yml"  # Name of the file where you've defined your alerting rules
+  - "alert_rules.yml"
 
 # alertmanager configuration to send alerts
 alerting:
   alertmanagers:
   - static_configs:
-    - targets:
-      - 'alertmanager:9093'
+    - targets: ["alertmanager:9093"]
 
 # metrics_path defaults to '/metrics'
 # scheme defaults to 'http'.

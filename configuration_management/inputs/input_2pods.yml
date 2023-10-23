@@ -13,7 +13,7 @@ topology:
       AS_NUMBER_EBGP_RANGE: 64512-65500
       AS_NUMBER_IBGP_VALUE: 100
       VRF1: '{"id": 1, "VLAN_ID": 0, "VXLAN_NAME": "vxlan1", "VRF_NAME": "vrf-1"}'
-      VRF2: '{"id": 2, "VLAN_ID": 0, "VXLAN_NAME": "vxlan2", "VRF_NAME": "vrf-2"}'
+      #VRF2: '{"id": 2, "VLAN_ID": 0, "VXLAN_NAME": "vxlan2", "VRF_NAME": "vrf-2"}'
   nodes:
     leaf1:
       kind: srl
@@ -35,7 +35,7 @@ topology:
       config:
         vars:
           type: leaf
-          interface_label: [{id: 2, interface_list: [e1/1]}]
+          interface_label: [{id: 1, interface_list: [e1/1]}]
     # leaf4:
     #   kind: srl
     #   type: ixrd2
@@ -85,6 +85,7 @@ topology:
       image: prom/prometheus:v2.37.8
       binds:
         - ../../visualization_monitoring/configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        - ../../visualization_monitoring/configs/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
       cmd: --config.file=/etc/prometheus/prometheus.yml
       ports:
         - 9090:9090

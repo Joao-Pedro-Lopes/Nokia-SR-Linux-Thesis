@@ -3,12 +3,20 @@ groups:
   rules:
   - alert: InterfaceDown
     expr: gnmic_srl_if_oper_state == 0
-    for: 1m
+    for: 5s
     labels:
       severity: critical
     annotations:
       description: "Interface has been down for more than 1 minute."
       summary: "Interface down on {{$labels.instance}}"
+  - alert: HighCpuUsage
+    expr: gnmic_srl_cpu > 20
+    for: 5s
+    labels:
+      severity: critical
+    annotations:
+      summary: "High CPU usage detected"
+      description: "CPU usage is above 20% for more than 5 seconds."
 
 # groups:
 # - name: gnmic_alerts

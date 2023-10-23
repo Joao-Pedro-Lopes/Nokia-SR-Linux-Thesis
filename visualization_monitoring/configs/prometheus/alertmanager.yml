@@ -1,30 +1,30 @@
-#global:
-  #smtp_smarthost: 'smtp.example.com:587'
-  #smtp_from: 'alertmanager@example.com'
-  #smtp_auth_username: 'username'
-  #smtp_auth_password: 'password'
-
-#route:
-  #group_by: ['alertname']
-  #receiver: 'email-notification'
-
-#receivers:
-#- name: 'email-notification'
-  #email_configs:
-  #- to: 'joaopedrolopes00@gmail.com'
-
 global:
   resolve_timeout: 1m
 
 route:
+  receiver: 'dummy-receiver'
   group_by: ['alertname']
-  group_wait: 1s
+  group_wait: 30s
   group_interval: 5m
   repeat_interval: 1h
-  receiver: 'dummy-receiver'
+  routes:
+  - match:
+      severity: critical
 
 receivers:
 - name: 'dummy-receiver'
+
+#   receiver: 'grafana-webhook-receiver'
+
+# receivers:
+# - name: 'grafana-webhook-receiver'
+#   webhook_configs:
+#   - url: 'http://localhost:3000/api/alertmanager/grafana'
+
+#   receiver: 'dummy-receiver'
+
+# receivers:
+# - name: 'dummy-receiver'
 
 #receiver not needed once we don't send notifications - not exactly like this
 #this way it will be only send to alertmanager to later be shown in Grafana

@@ -57,6 +57,7 @@ topology:
       image: prom/prometheus:v2.37.8
       binds:
         - ../../visualization_monitoring/configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        - ../../visualization_monitoring/configs/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
       cmd: --config.file=/etc/prometheus/prometheus.yml
       ports:
         - 9090:9090
