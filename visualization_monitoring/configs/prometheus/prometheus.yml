@@ -6,10 +6,10 @@ rule_files:
   - "alert_rules.yml"
 
 # alertmanager configuration to send alerts
-alerting:
-  alertmanagers:
-  - static_configs:
-    - targets: ["alertmanager:9093"]
+# alerting:
+#   alertmanagers:
+#   - static_configs:
+#     - targets: ["alertmanager:9093"]
 
 # metrics_path defaults to '/metrics'
 # scheme defaults to 'http'.

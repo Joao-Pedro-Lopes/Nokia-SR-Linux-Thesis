@@ -6,11 +6,11 @@ skip-verify: true
 encoding: json_ietf
 
 targets:
+  spine1:
+  superspine:
+  spine2:
   leaf1:
   leaf3:
-  spine1:
-  spine2:
-  superspine:
 
 subscriptions:
   srl_if_oper_state:

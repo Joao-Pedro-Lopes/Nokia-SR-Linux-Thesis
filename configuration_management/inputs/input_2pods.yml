@@ -91,15 +91,15 @@ topology:
         - 9090:9090
       group: "10"
     
-    alertmanager:
-      kind: linux
-      image: prom/alertmanager:latest
-      binds:
-        - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-      cmd: --config.file=/etc/alertmanager/alertmanager.yml
-      ports:
-        - 9093:9093
-      group: "10"
+    # alertmanager:
+    #   kind: linux
+    #   image: prom/alertmanager:latest
+    #   binds:
+    #     - ../../visualization_monitoring/configs/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    #   cmd: --config.file=/etc/alertmanager/alertmanager.yml
+    #   ports:
+    #     - 9093:9093
+    #   group: "10"
 
     grafana:
       kind: linux

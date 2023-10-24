@@ -7,6 +7,7 @@ from config_template import config_interfaces, config_ebgp, config_ibgp, config_
 from generate_ip_addresses import generate_ip_addresses
 from generate_as_numbers import generate_as_numbers
 from generate_inventory import generate_inventory
+from util import transform_dict
 
 # To know which configuration file must be loaded
 input_file = sys.argv[-2]
@@ -19,6 +20,9 @@ with open(f'../templates/{config_type}.j2', 'r') as template_file:
 
 with open(f'../templates/gnmic-config.j2', 'r') as template_file:
     gnmic_config_template = Template(template_file.read())
+
+with open(f'../templates/alert_rules.j2', 'r') as template_file:
+    alert_rules_template = Template(template_file.read())
 
 # Read the data from the input YAML file
 with open(input_file, 'r') as yaml_file:
@@ -34,7 +38,7 @@ inventory_content = ['[clab]']
 
 # Generate IP addresses
 interface_ips, interface_mac_vrf, loopback_ips, neighbors_bgp, neighbors_ibgp = generate_ip_addresses(data)
-print(neighbors_ibgp)
+print(interface_ips)
 
 # Generate and attribute AS numbers for eBGP
 as_number_min = int(data['topology']['defaults']['env']['AS_NUMBER_EBGP_RANGE'].split("-")[0])
@@ -56,12 +60,9 @@ for key, value in data["topology"]["defaults"]["env"].items():
         vrfs[vrf_info['id']]['vxlan_name'] = vrf_info['VXLAN_NAME']
         vrfs[vrf_info['id']]['vrf_name'] = vrf_info['VRF_NAME']
 
-targets_gnmic_config = []
-
 # Iterate over each node and generate a playbook
 for node, config in nodes.items():
     if 'config' in config and 'vars' in config['config']:
-        targets_gnmic_config.append(node)
         # Prepare the necessary inputs for the Jinja template
 
         # Construct the host_name variable
@@ -121,7 +122,11 @@ with open(inventory_filepath, 'w') as inventory_file:
 
 print(f'Generated inventory file: {inventory_filepath}')
 
-print(targets_gnmic_config)
+nodes = transform_dict(interface_ips)
 # Write targets to gnmic config file
 with open("../../visualization_monitoring/gnmic-config.yml", "w") as f:
-    f.write(gnmic_config_template.render(targets_gnmic_config=targets_gnmic_config))
+    f.write(gnmic_config_template.render(nodes=nodes))
+
+# Write alert rules
+with open("../../visualization_monitoring/configs/prometheus/alert_rules.yml", "w") as f:
+    f.write(alert_rules_template.render(nodes=nodes))

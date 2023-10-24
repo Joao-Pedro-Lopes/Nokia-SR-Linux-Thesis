@@ -1,0 +1,30 @@
+groups:
+- name: NokiaSRLinuxAlerts
+  rules: {%- for node, interfaces in nodes.items() %}
+    {%- for interface in interfaces %}
+  - alert: InterfaceDown - {{ node }} {{ interface }}
+    expr: gnmic_srl_if_oper_state_oper_state{source="{{ node }}", interface_name="{{ interface }}" } == 0
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      description: "Interface has been down for more than 10 seconds."
+      summary: "Interface down on {{ node }}"
+    {%- endfor %}
+  {%- endfor %}
+  - alert: HighCpuUsage
+    expr: gnmic_srl_cpu_instant > 10
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      summary: "High CPU usage detected"
+      description: "CPU usage is above 10% for more than 10 seconds."
+  - alert: HighMemoryUsage
+    expr: gnmic_srl_mem_utilization > 10
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      summary: "High memory usage detected"
+      description: "Memory usage is above 10% for more than 10 seconds."

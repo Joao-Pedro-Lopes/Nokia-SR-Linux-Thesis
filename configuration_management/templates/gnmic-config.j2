@@ -5,8 +5,8 @@ timeout: 10s
 skip-verify: true
 encoding: json_ietf
 
-targets:{% for target in targets_gnmic_config %}
-  {{ target }}:
+targets:{% for target in nodes.keys() %}
+  {{ target }}: 
 {%- endfor %}
 
 subscriptions:
