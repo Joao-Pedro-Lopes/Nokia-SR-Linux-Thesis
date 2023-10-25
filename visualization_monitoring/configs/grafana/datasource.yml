@@ -5,6 +5,3 @@ datasources:
   - name: Prometheus
     type: prometheus
     url: http://prometheus:9090
-  - name: Prometheus Alertmanager
-    type: prometheus
-    url: http://alertmanager:9093

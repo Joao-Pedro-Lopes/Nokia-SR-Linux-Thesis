@@ -13,18 +13,18 @@ groups:
     {%- endfor %}
   {%- endfor %}
   - alert: HighCpuUsage
-    expr: gnmic_srl_cpu_instant > 10
+    expr: gnmic_srl_cpu_instant > 80
     for: 10s
     labels:
       severity: critical
     annotations:
       summary: "High CPU usage detected"
-      description: "CPU usage is above 10% for more than 10 seconds."
+      description: "CPU usage is above 80% for more than 10 seconds."
   - alert: HighMemoryUsage
-    expr: gnmic_srl_mem_utilization > 10
+    expr: gnmic_srl_mem_utilization > 80
     for: 10s
     labels:
       severity: critical
     annotations:
       summary: "High memory usage detected"
-      description: "Memory usage is above 10% for more than 10 seconds."
+      description: "Memory usage is above 80% for more than 10 seconds."

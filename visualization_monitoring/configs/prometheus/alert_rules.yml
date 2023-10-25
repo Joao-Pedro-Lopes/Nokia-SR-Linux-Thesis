@@ -1,7 +1,7 @@
 groups:
 - name: NokiaSRLinuxAlerts
   rules:
-  - alert: InterfaceDown - spine1
+  - alert: InterfaceDown - spine1 ethernet-1/3
     expr: gnmic_srl_if_oper_state_oper_state{source="spine1", interface_name="ethernet-1/3" } == 0
     for: 10s
     labels:
@@ -9,7 +9,7 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on spine1"
-  - alert: InterfaceDown - spine1
+  - alert: InterfaceDown - spine1 ethernet-1/1
     expr: gnmic_srl_if_oper_state_oper_state{source="spine1", interface_name="ethernet-1/1" } == 0
     for: 10s
     labels:
@@ -17,7 +17,7 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on spine1"
-  - alert: InterfaceDown - superspine
+  - alert: InterfaceDown - superspine ethernet-1/1
     expr: gnmic_srl_if_oper_state_oper_state{source="superspine", interface_name="ethernet-1/1" } == 0
     for: 10s
     labels:
@@ -25,7 +25,7 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on superspine"
-  - alert: InterfaceDown - superspine
+  - alert: InterfaceDown - superspine ethernet-1/2
     expr: gnmic_srl_if_oper_state_oper_state{source="superspine", interface_name="ethernet-1/2" } == 0
     for: 10s
     labels:
@@ -33,7 +33,7 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on superspine"
-  - alert: InterfaceDown - spine2
+  - alert: InterfaceDown - spine2 ethernet-1/3
     expr: gnmic_srl_if_oper_state_oper_state{source="spine2", interface_name="ethernet-1/3" } == 0
     for: 10s
     labels:
@@ -41,7 +41,7 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on spine2"
-  - alert: InterfaceDown - spine2
+  - alert: InterfaceDown - spine2 ethernet-1/1
     expr: gnmic_srl_if_oper_state_oper_state{source="spine2", interface_name="ethernet-1/1" } == 0
     for: 10s
     labels:
@@ -49,7 +49,7 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on spine2"
-  - alert: InterfaceDown - leaf1
+  - alert: InterfaceDown - leaf1 ethernet-1/49
     expr: gnmic_srl_if_oper_state_oper_state{source="leaf1", interface_name="ethernet-1/49" } == 0
     for: 10s
     labels:
@@ -57,7 +57,7 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on leaf1"
-  - alert: InterfaceDown - leaf3
+  - alert: InterfaceDown - leaf3 ethernet-1/49
     expr: gnmic_srl_if_oper_state_oper_state{source="leaf3", interface_name="ethernet-1/49" } == 0
     for: 10s
     labels:
@@ -66,18 +66,18 @@ groups:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on leaf3"
   - alert: HighCpuUsage
-    expr: gnmic_srl_cpu_instant > 10
+    expr: gnmic_srl_cpu_instant > 80
     for: 10s
     labels:
       severity: critical
     annotations:
       summary: "High CPU usage detected"
-      description: "CPU usage is above 10% for more than 10 seconds."
+      description: "CPU usage is above 80% for more than 10 seconds."
   - alert: HighMemoryUsage
-    expr: gnmic_srl_mem_utilization > 10
+    expr: gnmic_srl_mem_utilization > 80
     for: 10s
     labels:
       severity: critical
     annotations:
       summary: "High memory usage detected"
-      description: "Memory usage is above 10% for more than 10 seconds."
+      description: "Memory usage is above 80% for more than 10 seconds."
