@@ -6,7 +6,7 @@
       "prefix": "clab",
       "mgmt": {
         "network": "clab",
-        "bridge": "br-e426503b0a4e",
+        "bridge": "br-64b19c1bb9ec",
         "ipv4-subnet": "172.20.20.0/24",
         "ipv4-gw": "172.20.20.1",
         "ipv6-subnet": "2001:172:20:20::/64",
@@ -28,13 +28,13 @@
       "image": "ghcr.io/openconfig/gnmic:0.30.0",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.4",
+      "mgmt-ipv4-address": "172.20.20.3",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::4",
+      "mgmt-ipv6-address": "2001:172:20:20::3",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "10",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/gnmic",
@@ -55,13 +55,13 @@
       "image": "grafana/grafana:10.1.5",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.6",
+      "mgmt-ipv4-address": "172.20.20.4",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::6",
+      "mgmt-ipv6-address": "2001:172:20:20::4",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "10",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/grafana",
@@ -82,13 +82,13 @@
       "image": "ghcr.io/nokia/srlinux:23.3.1",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.7",
+      "mgmt-ipv4-address": "172.20.20.8",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::7",
+      "mgmt-ipv6-address": "2001:172:20:20::8",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "",
         "clab-node-kind": "srl",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/leaf1",
@@ -109,13 +109,13 @@
       "image": "ghcr.io/nokia/srlinux:23.3.1",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.8",
+      "mgmt-ipv4-address": "172.20.20.10",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::8",
+      "mgmt-ipv6-address": "2001:172:20:20::a",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "",
         "clab-node-kind": "srl",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/leaf3",
@@ -136,13 +136,13 @@
       "image": "prom/prometheus:v2.37.8",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.5",
+      "mgmt-ipv4-address": "172.20.20.6",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::5",
+      "mgmt-ipv6-address": "2001:172:20:20::6",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "10",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/prometheus",
@@ -169,7 +169,7 @@
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "",
         "clab-node-kind": "srl",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/spine1",
@@ -190,13 +190,13 @@
       "image": "ghcr.io/nokia/srlinux:23.3.1",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.10",
+      "mgmt-ipv4-address": "172.20.20.9",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::a",
+      "mgmt-ipv6-address": "2001:172:20:20::9",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "",
         "clab-node-kind": "srl",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/spine2",
@@ -217,13 +217,13 @@
       "image": "ghcr.io/hellt/network-multitool",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.3",
+      "mgmt-ipv4-address": "172.20.20.5",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::3",
+      "mgmt-ipv6-address": "2001:172:20:20::5",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/srv1",
@@ -250,7 +250,7 @@
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "",
         "clab-node-kind": "linux",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/srv3",
@@ -271,13 +271,13 @@
       "image": "ghcr.io/nokia/srlinux:23.3.1",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.9",
+      "mgmt-ipv4-address": "172.20.20.7",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "2001:172:20:20::9",
+      "mgmt-ipv6-address": "2001:172:20:20::7",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
-        "clab-mgmt-net-bridge": "br-e426503b0a4e",
+        "clab-mgmt-net-bridge": "br-64b19c1bb9ec",
         "clab-node-group": "",
         "clab-node-kind": "srl",
         "clab-node-lab-dir": "/home/lopesjp/Nokia-SR-Linux-Thesis/configuration_management/src/clab-2pods/superspine",
@@ -293,13 +293,13 @@
       "a": {
         "node": "spine1",
         "interface": "e1-3",
-        "mac": "aa:c1:ab:cd:e1:a5",
+        "mac": "aa:c1:ab:a4:74:c9",
         "peer": "z"
       },
       "z": {
         "node": "superspine",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:c1:7c:16",
+        "mac": "aa:c1:ab:ed:a2:d6",
         "peer": "a"
       }
     },
@@ -307,13 +307,13 @@
       "a": {
         "node": "spine2",
         "interface": "e1-3",
-        "mac": "aa:c1:ab:24:8c:ac",
+        "mac": "aa:c1:ab:aa:1c:62",
         "peer": "z"
       },
       "z": {
         "node": "superspine",
         "interface": "e1-2",
-        "mac": "aa:c1:ab:3c:d9:53",
+        "mac": "aa:c1:ab:ff:29:aa",
         "peer": "a"
       }
     },
@@ -321,13 +321,13 @@
       "a": {
         "node": "leaf1",
         "interface": "e1-49",
-        "mac": "aa:c1:ab:38:54:8b",
+        "mac": "aa:c1:ab:1d:1d:8f",
         "peer": "z"
       },
       "z": {
         "node": "spine1",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:6b:68:6a",
+        "mac": "aa:c1:ab:6a:d4:98",
         "peer": "a"
       }
     },
@@ -335,13 +335,13 @@
       "a": {
         "node": "leaf3",
         "interface": "e1-49",
-        "mac": "aa:c1:ab:ec:9e:5b",
+        "mac": "aa:c1:ab:d4:e1:d6",
         "peer": "z"
       },
       "z": {
         "node": "spine2",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:64:70:ec",
+        "mac": "aa:c1:ab:12:3b:c0",
         "peer": "a"
       }
     },
@@ -349,13 +349,13 @@
       "a": {
         "node": "srv1",
         "interface": "eth1",
-        "mac": "aa:c1:ab:d9:b3:e3",
+        "mac": "aa:c1:ab:0c:63:22",
         "peer": "z"
       },
       "z": {
         "node": "leaf1",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:90:c0:ba",
+        "mac": "aa:c1:ab:be:e6:13",
         "peer": "a"
       }
     },
@@ -363,13 +363,13 @@
       "a": {
         "node": "srv3",
         "interface": "eth1",
-        "mac": "aa:c1:ab:00:31:6e",
+        "mac": "aa:c1:ab:33:23:73",
         "peer": "z"
       },
       "z": {
         "node": "leaf3",
         "interface": "e1-1",
-        "mac": "aa:c1:ab:1d:b5:0c",
+        "mac": "aa:c1:ab:c8:1e:08",
         "peer": "a"
       }
     }

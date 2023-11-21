@@ -3,24 +3,24 @@ all:
     linux:
       hosts:
         clab-2pods-gnmic:
-          ansible_host: 172.20.20.4
-        clab-2pods-grafana:
-          ansible_host: 172.20.20.6
-        clab-2pods-prometheus:
-          ansible_host: 172.20.20.5
-        clab-2pods-srv1:
           ansible_host: 172.20.20.3
+        clab-2pods-grafana:
+          ansible_host: 172.20.20.4
+        clab-2pods-prometheus:
+          ansible_host: 172.20.20.6
+        clab-2pods-srv1:
+          ansible_host: 172.20.20.5
         clab-2pods-srv3:
           ansible_host: 172.20.20.2
     srl:
       hosts:
         clab-2pods-leaf1:
-          ansible_host: 172.20.20.7
-        clab-2pods-leaf3:
           ansible_host: 172.20.20.8
+        clab-2pods-leaf3:
+          ansible_host: 172.20.20.10
         clab-2pods-spine1:
           ansible_host: 172.20.20.11
         clab-2pods-spine2:
-          ansible_host: 172.20.20.10
-        clab-2pods-superspine:
           ansible_host: 172.20.20.9
+        clab-2pods-superspine:
+          ansible_host: 172.20.20.7

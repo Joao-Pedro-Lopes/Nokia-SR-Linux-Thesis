@@ -1,14 +1,22 @@
 groups:
 - name: NokiaSRLinuxAlerts
   rules:
-  - alert: InterfaceDown - spine1 ethernet-1/3
-    expr: gnmic_srl_if_oper_state_oper_state{source="spine1", interface_name="ethernet-1/3" } == 0
+  - alert: InterfaceDown - leaf1 ethernet-1/1
+    expr: gnmic_srl_if_oper_state_oper_state{source="leaf1", interface_name="ethernet-1/1" } == 0
     for: 10s
     labels:
       severity: critical
     annotations:
       description: "Interface has been down for more than 10 seconds."
-      summary: "Interface down on spine1"
+      summary: "Interface down on leaf1"
+  - alert: InterfaceDown - leaf1 ethernet-1/2
+    expr: gnmic_srl_if_oper_state_oper_state{source="leaf1", interface_name="ethernet-1/2" } == 0
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      description: "Interface has been down for more than 10 seconds."
+      summary: "Interface down on leaf1"
   - alert: InterfaceDown - spine1 ethernet-1/1
     expr: gnmic_srl_if_oper_state_oper_state{source="spine1", interface_name="ethernet-1/1" } == 0
     for: 10s
@@ -17,24 +25,16 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on spine1"
-  - alert: InterfaceDown - superspine ethernet-1/1
-    expr: gnmic_srl_if_oper_state_oper_state{source="superspine", interface_name="ethernet-1/1" } == 0
+  - alert: InterfaceDown - spine1 ethernet-1/2
+    expr: gnmic_srl_if_oper_state_oper_state{source="spine1", interface_name="ethernet-1/2" } == 0
     for: 10s
     labels:
       severity: critical
     annotations:
       description: "Interface has been down for more than 10 seconds."
-      summary: "Interface down on superspine"
-  - alert: InterfaceDown - superspine ethernet-1/2
-    expr: gnmic_srl_if_oper_state_oper_state{source="superspine", interface_name="ethernet-1/2" } == 0
-    for: 10s
-    labels:
-      severity: critical
-    annotations:
-      description: "Interface has been down for more than 10 seconds."
-      summary: "Interface down on superspine"
-  - alert: InterfaceDown - spine2 ethernet-1/3
-    expr: gnmic_srl_if_oper_state_oper_state{source="spine2", interface_name="ethernet-1/3" } == 0
+      summary: "Interface down on spine1"
+  - alert: InterfaceDown - spine2 ethernet-1/2
+    expr: gnmic_srl_if_oper_state_oper_state{source="spine2", interface_name="ethernet-1/2" } == 0
     for: 10s
     labels:
       severity: critical
@@ -49,22 +49,22 @@ groups:
     annotations:
       description: "Interface has been down for more than 10 seconds."
       summary: "Interface down on spine2"
-  - alert: InterfaceDown - leaf1 ethernet-1/49
-    expr: gnmic_srl_if_oper_state_oper_state{source="leaf1", interface_name="ethernet-1/49" } == 0
+  - alert: InterfaceDown - leaf2 ethernet-1/1
+    expr: gnmic_srl_if_oper_state_oper_state{source="leaf2", interface_name="ethernet-1/1" } == 0
     for: 10s
     labels:
       severity: critical
     annotations:
       description: "Interface has been down for more than 10 seconds."
-      summary: "Interface down on leaf1"
-  - alert: InterfaceDown - leaf3 ethernet-1/49
-    expr: gnmic_srl_if_oper_state_oper_state{source="leaf3", interface_name="ethernet-1/49" } == 0
+      summary: "Interface down on leaf2"
+  - alert: InterfaceDown - leaf2 ethernet-1/2
+    expr: gnmic_srl_if_oper_state_oper_state{source="leaf2", interface_name="ethernet-1/2" } == 0
     for: 10s
     labels:
       severity: critical
     annotations:
       description: "Interface has been down for more than 10 seconds."
-      summary: "Interface down on leaf3"
+      summary: "Interface down on leaf2"
   - alert: HighCpuUsage
     expr: gnmic_srl_cpu_instant > 80
     for: 10s

@@ -3,10 +3,10 @@
   tasks:
 
     - name: Execute Python code to generate playbooks
-      command: python3 main.py ../inputs/input_2pods.yml general
+      command: python3 main.py ../inputs/input_redundancy.yml general
 
     - name: Start Containerlab, please wait...
-      shell: containerlab deploy --reconfigure -t ../inputs/input_2pods.yml
+      shell: containerlab deploy --reconfigure -t ../inputs/input_redundancy.yml
       become: yes  # This will elevate privileges for this task
       become_method: sudo  # This specifies to use sudo for elevation
     
